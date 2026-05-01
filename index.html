@@ -1173,6 +1173,356 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   .topbar-logo { font-size: 16px; }
   .topbar-meta { font-size: 8.5px; gap: 6px; }
 }
+
+/* ============================================================
+   § 04 — APÉNDICE COMPUTACIONAL · MARGIN CALCULATOR
+   Editorial-paper restyle of the v1 calculator.
+   Palette: paper / ink / rust / line.
+   ============================================================ */
+.calc-wrapper {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  padding: 56px 48px;
+  position: relative;
+}
+.calc-wrapper::before {
+  content: 'FIG. 04 · UNIT-ECONOMICS WORKBENCH';
+  position: absolute;
+  top: -9px;
+  left: 32px;
+  background: var(--paper);
+  padding: 0 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--rust);
+}
+
+.calc-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.calc-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 36px;
+}
+.calc-header h3 {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.calc-header h3 em {
+  font-style: italic;
+  color: var(--rust);
+  font-weight: 300;
+}
+.calc-header p {
+  font-family: var(--serif-body);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 56px;
+}
+@media (max-width: 900px) {
+  .calc-grid { grid-template-columns: 1fr; gap: 36px; }
+  .calc-header { grid-template-columns: 1fr; gap: 18px; }
+}
+
+.calc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.calc-field label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-weight: 500;
+}
+.calc-field label .val {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--rust);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ---- SELECT (PRODUCT) ---- */
+.calc-select {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 13px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238b3a1f' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.calc-select:hover, .calc-select:focus {
+  border-color: var(--rust);
+  outline: none;
+}
+.calc-select optgroup {
+  background: var(--paper);
+  color: var(--rust);
+  font-style: italic;
+  font-family: var(--serif-disp);
+}
+.calc-select option {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px;
+}
+
+/* ---- SLIDERS (blueprint hairline) ---- */
+.calc-wrapper input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1px;
+  background: var(--line);
+  outline: none;
+  border-radius: 0;
+}
+.calc-wrapper input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--rust);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--rust);
+  transition: transform 0.2s;
+}
+.calc-wrapper input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.calc-wrapper input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--rust);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--rust);
+}
+
+/* ---- CHIPS (channel selector) ---- */
+.chip-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.chip {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 12px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.chip:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+.chip.active {
+  background: var(--rust);
+  border-color: var(--rust);
+  color: var(--paper);
+}
+.chip strong {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.chip .chip-sub {
+  font-family: var(--serif-body);
+  font-size: 10px;
+  font-style: italic;
+  opacity: 0.85;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.chip.active .chip-sub { opacity: 0.9; }
+
+/* ---- TIER & FIELD HELP ---- */
+.tier-indicator {
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+.field-help {
+  margin-top: 4px;
+  font-family: var(--serif-body);
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--ink-faint);
+  text-transform: none;
+}
+
+/* ---- OUTPUT TABLE (hairline rows, mono labels, serif numbers) ---- */
+.calc-output {
+  border: 1px solid var(--line);
+  background: var(--paper-deep);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+.calc-output::before {
+  content: 'OUTPUT · MXN';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  background: var(--paper);
+  padding: 0 10px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--rust);
+}
+
+.calc-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px dotted var(--line);
+  padding-bottom: 12px;
+  gap: 16px;
+}
+.calc-line:last-child { border-bottom: none; padding-bottom: 0; }
+.calc-line .label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.calc-line .value {
+  font-family: var(--serif-disp);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: lining-nums;
+}
+.calc-line.sep {
+  border-bottom: 1px solid var(--ink) !important;
+  padding-bottom: 14px;
+}
+.calc-line .meta {
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-left: 6px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.calc-line.highlight {
+  padding-top: 14px;
+  border-top: 1px solid var(--ink);
+  border-bottom: none;
+  margin-top: 8px;
+}
+.calc-line.highlight .label {
+  color: var(--ink);
+}
+.calc-line.highlight .value {
+  font-size: 38px;
+  color: var(--rust);
+  font-style: italic;
+}
+
+.calc-disclaimer {
+  margin-top: 36px;
+  padding-top: 22px;
+  border-top: 1px dotted var(--line);
+  font-family: var(--serif-body);
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink-faint);
+}
+.calc-disclaimer::before {
+  content: '⁴ ';
+  color: var(--rust);
+  font-style: normal;
+}
+
+/* ---- MOBILE TWEAKS ---- */
+@media (max-width: 768px) {
+  .calc-wrapper { padding: 36px 20px; }
+  .calc-wrapper::before { left: 16px; font-size: 8px; }
+  .calc-header { margin-bottom: 32px; padding-bottom: 24px; gap: 14px; }
+  .calc-header h3 { font-size: 26px; }
+  .calc-header p { font-size: 13px; }
+  .calc-grid { gap: 28px; }
+  .calc-controls { gap: 22px; }
+  .chip-group { grid-template-columns: 1fr; }
+  .calc-select { font-size: 11px; padding: 12px 14px; padding-right: 36px; }
+  .calc-field label { font-size: 9px; flex-wrap: wrap; gap: 6px; }
+  .calc-field label .val { font-size: 15px; }
+  .calc-output { padding: 24px 18px; }
+  .calc-output::before { left: 14px; font-size: 8px; }
+  .calc-line .label { font-size: 9px; }
+  .calc-line .value { font-size: 18px; }
+  .calc-line.highlight .value { font-size: 30px; }
+  .calc-disclaimer { font-size: 11px; margin-top: 26px; padding-top: 18px; }
+}
 </style>
 </head>
 
@@ -1567,12 +1917,117 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   </div>
 </section>
 
-<!-- ============ § 04 — BLACKLIST · TABLA PERIÓDICA ============ -->
-<section class="paper" id="blacklist">
+<!-- ============ § 04 — APÉNDICE COMPUTACIONAL · MARGIN CALCULATOR ============ -->
+<section class="paper" id="calc">
   <div class="container">
     <div class="section-head reveal">
       <div class="section-num">
         <span class="n">№ 04</span>
+        <span class="lbl">Apéndice computacional</span>
+        <span class="sub">Unit economics</span>
+      </div>
+      <div>
+        <h2 class="section-title">Calcula el <em>margen real</em> de un lanzamiento.</h2>
+        <p class="section-deck">
+          Datos verificados contra el catálogo de maquila TSC LABS 2024 — 20 SKUs reales, tarifas menudeo/mayoreo aplicadas según volumen.
+        </p>
+      </div>
+    </div>
+
+    <div class="calc-wrapper reveal">
+      <div class="calc-inner">
+        <div class="calc-header">
+          <h3>Calcula <em>el margen real</em><br>de un lanzamiento.</h3>
+          <p>Unit economics honesto: catálogo completo de 20 SKUs con precios reales TSC (menudeo vs mayoreo se aplica automático según volumen), canal de venta con descuento de retailer, envase custom opcional, e IVA 16% deducido. Utilidad neta real.</p>
+        </div>
+
+        <div class="calc-grid">
+          <div class="calc-controls">
+
+            <div class="calc-field">
+              <label>↳ PRODUCTO</label>
+              <select class="calc-select" id="productSel"></select>
+            </div>
+
+            <div class="calc-field">
+              <label>↳ VOLUMEN DE PRODUCCIÓN <span class="val" id="volVal">1,000 unidades</span></label>
+              <input type="range" id="volume" min="100" max="10000" value="1000" step="50">
+              <div class="tier-indicator" id="tierInd">— Tarifa mayoreo (+400 piezas)</div>
+            </div>
+
+            <div class="calc-field">
+              <label>↳ PRECIO PÚBLICO SUGERIDO <span class="val" id="priceVal">$450 MXN</span></label>
+              <input type="range" id="price" min="100" max="1500" value="450" step="10">
+              <div class="field-help">Precio final de venta al consumidor (incluye IVA)</div>
+            </div>
+
+            <div class="calc-field">
+              <label>↳ CANAL DE VENTA</label>
+              <div class="chip-group" id="channelGroup">
+                <button class="chip active" data-discount="0" data-label="D2C"><strong>D2C directo</strong><span class="chip-sub">0% descuento</span></button>
+                <button class="chip" data-discount="0.45" data-label="Retail"><strong>Retail</strong><span class="chip-sub">Sephora / Palacio · −45%</span></button>
+                <button class="chip" data-discount="0.50" data-label="Mayorista"><strong>Mayorista</strong><span class="chip-sub">Distribuidor · −50%</span></button>
+              </div>
+            </div>
+
+            <div class="calc-field">
+              <label>↳ ENVASE CUSTOM <span class="val" id="pkgVal">sin envase custom</span></label>
+              <input type="range" id="pkg" min="0" max="60" value="0" step="1">
+              <div class="field-help">+MXN / unidad por envase primario + etiqueta personalizada (0–60)</div>
+            </div>
+
+          </div>
+
+          <div class="calc-output">
+            <div class="calc-line">
+              <div class="label">Producto</div>
+              <div class="value" id="outProduct" style="font-size:14px;">—</div>
+            </div>
+            <div class="calc-line">
+              <div class="label">Pago a TSC <span class="meta" id="outTierNote">—</span></div>
+              <div class="value" id="outTSC">$0</div>
+            </div>
+            <div class="calc-line" id="envaseLine" style="display:none;">
+              <div class="label">Envase custom <span class="meta" id="outPkgNote">—</span></div>
+              <div class="value" id="outEnvase">$0</div>
+            </div>
+            <div class="calc-line sep">
+              <div class="label">Inversión total</div>
+              <div class="value" id="outInvest">$0</div>
+            </div>
+            <div class="calc-line">
+              <div class="label">Ingreso bruto <span class="meta" id="outCanalTag">(D2C)</span></div>
+              <div class="value" id="outRevenue">$0</div>
+            </div>
+            <div class="calc-line">
+              <div class="label">(−) IVA 16%</div>
+              <div class="value" id="outIva">$0</div>
+            </div>
+            <div class="calc-line">
+              <div class="label">Utilidad neta</div>
+              <div class="value" id="outProfit">$0</div>
+            </div>
+            <div class="calc-line highlight">
+              <div class="label">Margen neto</div>
+              <div class="value" id="outMargin">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="calc-disclaimer">
+          Precios TSC verificados contra catálogo oficial 2024. Menudeo se aplica a 100–399 piezas, mayoreo a partir de 400. Canal retail asume descuento típico 45% (Sephora/Palacio/Liverpool); mayorista 50% (distribuidor). IVA 16% deducido del ingreso bruto (precios públicos en MX incluyen IVA). Envase custom es estimado referencial — el costo real depende de material, cantidad y proveedor. No incluye branding, marketing, distribución ni costos indirectos. Valores finales se confirman tras reunión de scoping.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ § 05 — BLACKLIST · TABLA PERIÓDICA ============ -->
+<section class="paper" id="blacklist">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-num">
+        <span class="n">№ 05</span>
         <span class="lbl">Lo que no usamos</span>
         <span class="sub">Tabla de exclusión</span>
       </div>
