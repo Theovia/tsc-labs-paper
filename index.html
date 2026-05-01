@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f6f1e7">
+<title>TSC LABS — Dossier № TSC-2026/01 · Management de Talento</title>
+<meta name="description" content="Dossier técnico TSC LABS. Laboratorio de skincare biotecnológico mexicano. Formulación, marca blanca, maquila exclusiva, envasado integral. Permisos COFEPRIS NOM-259-SSA1-2022.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;700;900&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TSC LABS · DOSSIER № TSC-2026/01
+   Aesthetic: Technical Bulletin / Scientific Paper
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #f6f1e7;
+  --paper-deep:   #ede5d2;
+  --ink:          #1a1612;
+  --ink-soft:     #4a3f35;
+  --ink-faint:    #7a6f63;
+  --rust:         #8b3a1f;
+  --rust-soft:    #b04a26;
+  --line:         #d6cdb8;
+  --line-soft:    #e2d9c4;
+  --hl:           #f0e6d0;
+
+  --serif-body:   'Crimson Pro', 'EB Garamond', Georgia, serif;
+  --serif-disp:   'Fraunces', 'Crimson Pro', Georgia, serif;
+  --mono:         'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --sans:         'Inter Tight', 'Inter', system-ui, sans-serif;
+  --logo-font:    'Inter', system-ui, sans-serif;
+
+  --col-gap:      48px;
+  --gutter:       40px;
+  --max:          1280px;
+  --topbar-h:     56px;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--serif-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  font-feature-settings: "kern", "liga", "onum";
+  font-variant-numeric: oldstyle-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ============ FILM GRAIN OVERLAY ============ */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0 0.07  0 0 0 0.4 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+}
+
+/* ============ SELECTION ============ */
+::selection { background: var(--ink); color: var(--paper); }
+::-moz-selection { background: var(--ink); color: var(--paper); }
+
+/* ============ TYPOGRAPHY UTILITIES ============ */
+.mono {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-variant-numeric: lining-nums;
+}
+
+.mono-11 { font-size: 11px; }
+
+.label-mono {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.fn { /* footnote marker */
+  font-family: var(--serif-body);
+  font-size: 0.65em;
+  vertical-align: super;
+  color: var(--rust);
+  font-feature-settings: "sups";
+  letter-spacing: 0;
+  margin-left: 1px;
+}
+
+em.disp {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-weight: 300;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ============ LAYOUT GRID ============ */
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.rule { height: 1px; background: var(--line); width: 100%; }
+.rule-ink { height: 1px; background: var(--ink); width: 100%; }
+
+/* ============ TOPBAR ============ */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: rgba(246, 241, 231, 0.92);
+  backdrop-filter: saturate(160%) blur(8px);
+  -webkit-backdrop-filter: saturate(160%) blur(8px);
+  border-bottom: 1px solid var(--line);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--gutter);
+}
+
+.topbar-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.topbar-logo {
+  font-family: var(--logo-font);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.05em;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  color: var(--ink);
+}
+.topbar-logo strong {
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+
+.topbar-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.topbar-meta .sep { color: var(--line); }
+.topbar-meta .conf { color: var(--rust); font-weight: 600; }
+
+@media (max-width: 768px) {
+  .topbar-meta { gap: 8px; font-size: 9px; }
+  .topbar-meta .hide-sm { display: none; }
+}
+
+/* ============ HERO (Section 01) ============ */
+.hero {
+  padding: calc(var(--topbar-h) + 60px) var(--gutter) 80px;
+  position: relative;
+  border-bottom: 1px solid var(--ink);
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.hero-doc-stamp {
+  position: absolute;
+  top: calc(var(--topbar-h) + 24px);
+  right: var(--gutter);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: right;
+  line-height: 1.8;
+}
+.hero-doc-stamp .lbl { color: var(--ink-faint); }
+.hero-doc-stamp .val { color: var(--ink); }
+.hero-doc-stamp .conf { color: var(--rust); font-weight: 600; letter-spacing: 0.18em; }
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: var(--max);
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 48px;
+  height: 1px;
+  background: var(--rust);
+  display: inline-block;
+}
+.hero-eyebrow .seg { color: var(--ink-faint); }
+.hero-eyebrow .seg.active { color: var(--rust); }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: var(--col-gap);
+  align-items: start;
+  position: relative;
+}
+
+/* Vertical column rule between columns */
+.hero-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(1.45 / 2.45 * 100% - var(--col-gap)/2);
+  width: 1px;
+  background: var(--line);
+}
+
+.hero-left {
+  position: relative;
+  padding-right: calc(var(--col-gap) / 2);
+}
+
+.hero-title {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(54px, 7.4vw, 108px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  font-feature-settings: "ss01", "kern", "liga";
+  margin-bottom: 32px;
+  position: relative;
+}
+.hero-title em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink);
+}
+.hero-title .em-rust { color: var(--rust); font-style: italic; font-weight: 300; }
+
+/* Hero h1 — annotation lines (scientific marks drawn next to it via DrawSVG) */
+.hero-annot {
+  position: absolute;
+  top: 0;
+  left: -28px;
+  height: 100%;
+  width: 24px;
+  pointer-events: none;
+  display: none;
+}
+@media (min-width: 1100px) {
+  .hero-annot { display: block; }
+}
+
+.hero-abstract {
+  font-family: var(--serif-body);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin-top: 28px;
+  font-weight: 400;
+  text-align: justify;
+  hyphens: auto;
+}
+.hero-abstract::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.hero-abstract .first-letter {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 0.85;
+  float: left;
+  padding: 6px 10px 0 0;
+  color: var(--rust);
+}
+
+.hero-meta-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.hero-meta-row .key { color: var(--ink-faint); }
+.hero-meta-row .val { color: var(--ink); }
+.hero-meta-row .center { text-align: center; }
+
+/* HERO RIGHT — graduated cylinder stat cards */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-left: calc(var(--col-gap) / 2);
+}
+
+.cyl-card {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 20px;
+  align-items: stretch;
+  padding: 18px 0 18px 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.cyl-card:first-child { padding-top: 0; }
+.cyl-card:last-child { border-bottom: none; padding-bottom: 0; }
+
+.cyl-svg-wrap {
+  width: 64px;
+  height: 120px;
+  position: relative;
+}
+.cyl-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cyl-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.cyl-figure {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: clamp(36px, 4.4vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.cyl-figure .unit {
+  font-size: 0.5em;
+  color: var(--rust);
+  font-weight: 500;
+  margin-left: 2px;
+  letter-spacing: -0.02em;
+}
+.cyl-figure .sup {
+  font-size: 0.45em;
+  color: var(--rust);
+  vertical-align: top;
+  font-weight: 500;
+}
+
+.cyl-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-top: 8px;
+}
+.cyl-source {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+
+@media (max-width: 980px) {
+  .hero { padding: calc(var(--topbar-h) + 36px) 24px 56px; min-height: auto; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-grid::before { display: none; }
+  .hero-left { padding-right: 0; }
+  .hero-right { padding-left: 0; padding-top: 32px; border-top: 1px solid var(--line); }
+  .hero-doc-stamp { display: none; }
+  .hero-title { font-size: clamp(44px, 11vw, 72px); }
+  .hero-abstract { font-size: 17px; }
+}
+
+/* ============ MARQUEE / RUNNING HEAD ============ */
+.runhead {
+  border-bottom: 1px solid var(--ink);
+  background: var(--paper-deep);
+  overflow: hidden;
+  position: relative;
+}
+.runhead-track {
+  display: flex;
+  gap: 48px;
+  white-space: nowrap;
+  padding: 14px 0;
+  animation: marq 60s linear infinite;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.runhead-track span { display: inline-flex; align-items: center; gap: 48px; }
+.runhead-track span::after {
+  content: '·';
+  color: var(--rust);
+  font-size: 18px;
+  line-height: 0;
+}
+@keyframes marq {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .runhead-track { animation: none; }
+}
+
+/* ============ SECTION SCAFFOLDING ============ */
+section.paper {
+  border-bottom: 1px solid var(--line);
+  padding: 96px 0;
+  position: relative;
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--col-gap);
+  align-items: start;
+  margin-bottom: 64px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.section-num .n {
+  font-family: var(--serif-disp);
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--rust);
+  font-style: italic;
+  font-feature-settings: "lnum";
+}
+.section-num .lbl { color: var(--ink); margin-top: 6px; }
+.section-num .sub { color: var(--ink-faint); }
+
+.section-title {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(32px, 3.6vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  max-width: 22ch;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--rust);
+  font-weight: 300;
+}
+
+.section-deck {
+  font-family: var(--serif-body);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-top: 16px;
+  max-width: 60ch;
+}
+
+@media (max-width: 980px) {
+  section.paper { padding: 72px 0; }
+  .section-head { grid-template-columns: 1fr; gap: 18px; margin-bottom: 44px; }
+  .section-num { flex-direction: row; align-items: baseline; gap: 14px; }
+  .section-num .n { font-size: 48px; }
+  .section-title { font-size: clamp(28px, 7vw, 40px); }
+}
+
+/* ============ § 02 — POR QUÉ TSC ============ */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--line);
+}
+.why-card {
+  padding: 40px 32px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 360px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+.why-card:hover { background: var(--hl); }
+.why-card .why-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rust);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.why-card .why-num::before {
+  content: '';
+  width: 18px; height: 1px;
+  background: var(--rust);
+  display: inline-block;
+}
+.why-card h3 {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.why-card h3 em {
+  font-style: italic;
+  color: var(--rust);
+  font-weight: 300;
+}
+.why-card p {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  flex: 1;
+  text-align: justify;
+  hyphens: auto;
+}
+.why-card .foot {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.why-card-link {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-decoration: none;
+  color: inherit;
+}
+.why-card-link:hover { background: var(--hl); }
+.why-card-link:hover .foot { color: var(--rust); }
+.why-card-link .foot::after {
+  content: '↗';
+  margin-left: auto;
+  color: var(--rust);
+  font-family: var(--serif-body);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+@media (max-width: 980px) {
+  .why-grid { grid-template-columns: 1fr; }
+  .why-card { min-height: auto; padding: 32px 24px; }
+  .why-card h3 { font-size: 26px; }
+}
+
+/* ============ § 03 — LA PRUEBA (table) ============ */
+.proof-deck {
+  font-family: var(--serif-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 48px;
+  max-width: 78ch;
+  text-align: justify;
+}
+.proof-deck em { font-style: italic; color: var(--rust); }
+
+.proof-tbl {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.cat-head {
+  display: grid;
+  grid-template-columns: 1.6fr 0.6fr 0.6fr 1.4fr;
+  gap: 24px;
+  padding: 14px 16px;
+  background: var(--paper-deep);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 600;
+}
+.cat-head > div:nth-child(2),
+.cat-head > div:nth-child(3) { text-align: right; }
+
+.cat-block {
+  border-bottom: 1px solid var(--line);
+}
+.cat-block:last-child { border-bottom: none; }
+
+.cat-title {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 28px 16px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  font-weight: 600;
+}
+.cat-title::before {
+  content: '§';
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: var(--rust);
+}
+
+.tbl-row {
+  display: grid;
+  grid-template-columns: 1.6fr 0.6fr 0.6fr 1.4fr;
+  gap: 24px;
+  padding: 18px 16px;
+  border-top: 1px solid var(--line-soft);
+  align-items: baseline;
+  transition: background 0.2s ease;
+}
+.tbl-row:hover { background: var(--hl); }
+
+.tbl-row.tsc {
+  background: rgba(139, 58, 31, 0.04);
+  border-top: 1px solid var(--rust);
+  border-bottom: 1px solid var(--rust);
+}
+.tbl-row.tsc .brand {
+  color: var(--rust);
+  font-weight: 500;
+}
+.tbl-row.tsc .brand::before {
+  content: '★';
+  color: var(--rust);
+  margin-right: 8px;
+  font-size: 0.85em;
+}
+
+.tbl-row .brand {
+  font-family: var(--serif-disp);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.tbl-row .desc {
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+.tbl-row .price {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: lining-nums tabular-nums;
+  text-align: right;
+}
+.tbl-row .perml {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  text-align: right;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.tbl-row .verdict {
+  font-family: var(--serif-body);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.tbl-row.tsc .verdict {
+  color: var(--rust);
+  font-weight: 500;
+  font-style: italic;
+}
+
+@media (max-width: 980px) {
+  .cat-head { display: none; }
+  .tbl-row { grid-template-columns: 1fr; gap: 8px; padding: 16px; }
+  .tbl-row .price, .tbl-row .perml { text-align: left; }
+  .tbl-row .price { font-size: 22px; }
+}
+
+/* ============ § 04 — PERIODIC TABLE BLACKLIST ============ */
+.blacklist-deck {
+  font-family: var(--serif-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 48px;
+  max-width: 76ch;
+  text-align: justify;
+}
+.blacklist-deck em { font-style: italic; color: var(--rust); }
+
+.periodic {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.periodic .pt-card {
+  position: relative;
+  aspect-ratio: 1 / 1.18;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+.periodic .pt-card:hover {
+  background: var(--paper-deep);
+}
+.periodic .pt-card .pt-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.periodic .pt-card .pt-symbol {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(36px, 4vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--rust);
+  font-style: italic;
+  font-feature-settings: "lnum";
+}
+.periodic .pt-card .pt-name {
+  font-family: var(--serif-body);
+  font-size: 14px;
+  line-height: 1.25;
+  color: var(--ink);
+  font-weight: 500;
+  position: relative;
+  display: inline;
+}
+.periodic .pt-card .pt-fn {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Default state shows toxic with strikethrough */
+.periodic .pt-card .pt-state.tox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.periodic .pt-card .pt-state.alt {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+}
+.periodic .pt-card.flipped .pt-state.tox { display: none; }
+.periodic .pt-card.flipped .pt-state.alt { display: flex; }
+.periodic .pt-card.flipped { background: var(--hl); }
+.periodic .pt-card.flipped .pt-symbol { color: var(--ink); }
+
+.pt-state.tox .pt-name {
+  text-decoration: line-through;
+  text-decoration-color: var(--rust);
+  text-decoration-thickness: 1.5px;
+  color: var(--ink-soft);
+}
+.pt-state.alt .pt-name {
+  color: var(--ink);
+}
+.pt-toggle {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rust);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.pt-card.flipped .pt-toggle { color: var(--ink); }
+
+.pt-legend {
+  margin-top: 24px;
+  display: flex;
+  gap: 24px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  flex-wrap: wrap;
+}
+.pt-legend strong { color: var(--rust); font-weight: 600; }
+
+@media (max-width: 980px) {
+  .periodic { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .periodic .pt-card { aspect-ratio: 1 / 1.25; padding: 12px; }
+}
+@media (max-width: 480px) {
+  .periodic { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============ § 05 — SERVICIOS ============ */
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--line);
+}
+.svc {
+  padding: 36px 32px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 20px;
+  align-items: start;
+  transition: background 0.3s;
+}
+.svc:hover { background: var(--hl); }
+
+.svc-num {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--rust);
+}
+.svc-body h4 {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.svc-body h4 em { font-style: italic; color: var(--rust); }
+.svc-body p {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-align: justify;
+  hyphens: auto;
+  margin-bottom: 18px;
+}
+.svc-body .ideal {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.svc-body .ideal strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.svc-body .ideal .who {
+  color: var(--ink);
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+}
+
+@media (max-width: 980px) {
+  .svc-grid { grid-template-columns: 1fr; }
+  .svc { padding: 28px 24px; grid-template-columns: 48px 1fr; gap: 16px; }
+  .svc-num { font-size: 36px; }
+  .svc-body h4 { font-size: 24px; }
+}
+
+/* ============ § 06 — CONTACTO ============ */
+.contact-wrap {
+  border-top: 1px solid var(--ink);
+  background: var(--paper-deep);
+  padding: 96px 0 80px;
+}
+.contact-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.contact-eyebrow::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--rust);
+}
+.contact-title {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(40px, 5.5vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 56px;
+  max-width: 14ch;
+}
+.contact-title em {
+  font-style: italic;
+  color: var(--rust);
+  font-weight: 300;
+}
+
+.channels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-left: 1px solid var(--line);
+}
+.channel {
+  padding: 32px 24px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  position: relative;
+  will-change: transform;
+}
+.channel:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.channel:hover .ch-label,
+.channel:hover .ch-arrow { color: var(--paper); }
+.channel:hover .ch-value { color: var(--paper); }
+
+.ch-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.3s;
+}
+.ch-value {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  transition: color 0.3s;
+  word-break: break-word;
+}
+.ch-arrow {
+  margin-left: auto;
+  font-family: var(--serif-body);
+  font-size: 18px;
+  color: var(--rust);
+  transition: color 0.3s, transform 0.3s;
+}
+.channel:hover .ch-arrow { transform: translate(4px, -4px); }
+
+@media (max-width: 980px) {
+  .channels { grid-template-columns: 1fr; }
+  .contact-wrap { padding: 64px 0 56px; }
+}
+
+/* ============ FOOTER ============ */
+footer.colophon {
+  border-top: 1px solid var(--ink);
+  padding: 32px var(--gutter);
+  background: var(--paper);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+footer.colophon .left strong { color: var(--ink); font-weight: 600; }
+footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right; }
+
+@media (max-width: 768px) {
+  footer.colophon { grid-template-columns: 1fr; gap: 12px; padding: 24px; }
+  footer.colophon .right { text-align: left; }
+}
+
+/* ============ REVEAL ANIMATIONS (Intersection Observer) ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.2, 0.6, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============ FOOTNOTE-LIKE CAPTION ROW ============ */
+.caption {
+  font-family: var(--serif-body);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-faint);
+  font-style: italic;
+  padding-top: 18px;
+  margin-top: 24px;
+  border-top: 1px dotted var(--line);
+}
+.caption::before {
+  content: '¹ ';
+  color: var(--rust);
+  font-style: normal;
+}
+.caption.fn2::before { content: '² '; }
+.caption.fn3::before { content: '³ '; }
+
+/* ============ DOC-ID CORNER TICK MARKS ============ */
+.tick-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 12px var(--gutter);
+  border-top: 1px dotted var(--line);
+}
+
+/* ============ RESPONSIVE FINAL TWEAKS ============ */
+@media (max-width: 768px) {
+  :root { --gutter: 20px; --col-gap: 28px; }
+  .topbar { padding: 0 20px; }
+  .topbar-logo { font-size: 18px; }
+  .hero { padding: calc(var(--topbar-h) + 32px) 20px 48px; }
+  .hero-title { font-size: clamp(38px, 12vw, 60px); line-height: 0.98; }
+  .hero-eyebrow { font-size: 10px; gap: 12px; margin-bottom: 24px; }
+  .hero-eyebrow::before { width: 32px; }
+  .hero-abstract { font-size: 16px; }
+  .cyl-figure { font-size: clamp(32px, 9vw, 48px); }
+  section.paper { padding: 56px 0; }
+  .section-num .n { font-size: 40px; }
+  .section-title { font-size: clamp(26px, 7vw, 36px); }
+  .why-card h3 { font-size: 24px; }
+  .svc-body h4 { font-size: 22px; }
+  .contact-title { font-size: clamp(34px, 11vw, 56px); }
+  .ch-value { font-size: clamp(20px, 6vw, 26px); }
+  .runhead-track { animation-duration: 80s; }
+}
+@media (max-width: 380px) {
+  :root { --gutter: 16px; }
+  .hero-title { font-size: clamp(34px, 12vw, 48px); }
+  .topbar-logo { font-size: 16px; }
+  .topbar-meta { font-size: 8.5px; gap: 6px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-logo"><strong>TSC</strong>LABS</div>
+    <div class="topbar-meta">
+      <span>DOSSIER № TSC-2026/01</span>
+      <span class="sep hide-sm">·</span>
+      <span class="hide-sm">ZAPOPAN/MX</span>
+      <span class="sep">·</span>
+      <span class="conf">CONFIDENCIAL</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO · § 01 ============ -->
+<section class="hero">
+
+  <div class="hero-doc-stamp">
+    <div><span class="lbl">DOC</span> <span class="val">№ TSC-2026/01</span></div>
+    <div><span class="lbl">VER.</span> <span class="val">1.0 · ABR 2026</span></div>
+    <div><span class="lbl">CLASIF.</span> <span class="conf">CONFIDENCIAL</span></div>
+    <div><span class="lbl">USO</span> <span class="val">MGMT TALENTO</span></div>
+  </div>
+
+  <div class="hero-eyebrow">
+    <span class="seg active">DOSSIER № 01</span>
+    <span class="seg">·</span>
+    <span class="seg">MANAGEMENT DE TALENTO</span>
+  </div>
+
+  <div class="hero-grid">
+
+    <div class="hero-left">
+      <!-- Annotation marks (drawn by GSAP DrawSVG) -->
+      <svg class="hero-annot" viewBox="0 0 24 400" preserveAspectRatio="none" aria-hidden="true">
+        <line class="annot-l" x1="20" y1="6" x2="20" y2="394" stroke="#8b3a1f" stroke-width="1" fill="none"/>
+        <line class="annot-t1" x1="14" y1="6" x2="20" y2="6" stroke="#8b3a1f" stroke-width="1" fill="none"/>
+        <line class="annot-t2" x1="14" y1="100" x2="20" y2="100" stroke="#8b3a1f" stroke-width="1" fill="none"/>
+        <line class="annot-t3" x1="14" y1="200" x2="20" y2="200" stroke="#8b3a1f" stroke-width="1" fill="none"/>
+        <line class="annot-t4" x1="14" y1="300" x2="20" y2="300" stroke="#8b3a1f" stroke-width="1" fill="none"/>
+        <line class="annot-t5" x1="14" y1="394" x2="20" y2="394" stroke="#8b3a1f" stroke-width="1" fill="none"/>
+      </svg>
+
+      <h1 class="hero-title">
+        Lanza la marca<br>
+        de skincare<br>
+        de tu talento.<br>
+        <em>Desde la fórmula</em><br>
+        <em class="em-rust">hasta el frasco.</em>
+      </h1>
+
+      <p class="hero-abstract">
+        <span class="first-letter">S</span>omos los biotecnólogos que ya están haciendo lo que las grandes marcas mexicanas no pueden ofrecer<span class="fn">¹</span>: fórmulas limpias, científicas, y a precio competitivo. Esta es la propuesta de cómo construimos juntos una marca de cuidado personal con los talentos que representas — desde la formulación de cada activo hasta el envasado final bajo los más altos estándares de la normativa mexicana<span class="fn">²</span>.
+      </p>
+
+      <div class="hero-meta-row">
+        <div><span class="key">RECEP.</span> <span class="val">N. CENTELLA</span></div>
+        <div class="center"><span class="key">EMITIDO</span> <span class="val">ZAPOPAN, MX</span></div>
+        <div><span class="key">FOLIO</span> <span class="val">TSC—01</span></div>
+      </div>
+
+      <div class="caption">
+        Comparativa elaborada sobre productos estrella de marcas internacionales (Clinique, Kiehl&apos;s, L&apos;Oréal, Lancôme, Mario Badescu) tomados como referencia de mercado en Palacio de Hierro y Sephora MX, abril 2026.
+      </div>
+    </div>
+
+    <div class="hero-right">
+
+      <!-- STAT 1 — graduated cylinder -->
+      <div class="cyl-card">
+        <div class="cyl-svg-wrap">
+          <svg class="cyl-svg" viewBox="0 0 64 120" data-fill="0.78" aria-hidden="true">
+            <defs>
+              <clipPath id="cyl-clip-1">
+                <path d="M 12 12 L 12 108 Q 12 116 20 116 L 44 116 Q 52 116 52 108 L 52 12 Z"/>
+              </clipPath>
+            </defs>
+            <!-- liquid (inside clip) -->
+            <rect class="cyl-liquid" x="12" y="120" width="40" height="0" fill="#8b3a1f" fill-opacity="0.18" clip-path="url(#cyl-clip-1)"/>
+            <rect class="cyl-meniscus" x="12" y="120" width="40" height="2" fill="#8b3a1f" clip-path="url(#cyl-clip-1)"/>
+            <!-- glass outline -->
+            <path class="cyl-outline" d="M 12 12 L 12 108 Q 12 116 20 116 L 44 116 Q 52 116 52 108 L 52 12" fill="none" stroke="#1a1612" stroke-width="1"/>
+            <!-- rim -->
+            <line class="cyl-rim" x1="8" y1="12" x2="56" y2="12" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-rim" x1="8" y1="9" x2="56" y2="9" stroke="#1a1612" stroke-width="1"/>
+            <!-- ticks -->
+            <line class="cyl-tick" x1="48" y1="30" x2="52" y2="30" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="50" x2="52" y2="50" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="70" x2="52" y2="70" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="90" x2="52" y2="90" stroke="#1a1612" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="cyl-text">
+          <div class="cyl-figure"><span class="counter" data-target="11.3" data-decimals="1" data-prefix="$">$0.0</span><span class="unit">B</span></div>
+          <div>
+            <div class="cyl-label">Mercado mexicano de belleza y cuidado personal — 2024 (USD)</div>
+            <div class="cyl-source">FUENTE / MORDOR INTELLIGENCE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAT 2 -->
+      <div class="cyl-card">
+        <div class="cyl-svg-wrap">
+          <svg class="cyl-svg" viewBox="0 0 64 120" data-fill="0.62" aria-hidden="true">
+            <defs>
+              <clipPath id="cyl-clip-2">
+                <path d="M 12 12 L 12 108 Q 12 116 20 116 L 44 116 Q 52 116 52 108 L 52 12 Z"/>
+              </clipPath>
+            </defs>
+            <rect class="cyl-liquid" x="12" y="120" width="40" height="0" fill="#8b3a1f" fill-opacity="0.18" clip-path="url(#cyl-clip-2)"/>
+            <rect class="cyl-meniscus" x="12" y="120" width="40" height="2" fill="#8b3a1f" clip-path="url(#cyl-clip-2)"/>
+            <path class="cyl-outline" d="M 12 12 L 12 108 Q 12 116 20 116 L 44 116 Q 52 116 52 108 L 52 12" fill="none" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-rim" x1="8" y1="12" x2="56" y2="12" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-rim" x1="8" y1="9" x2="56" y2="9" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-tick" x1="48" y1="30" x2="52" y2="30" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="50" x2="52" y2="50" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="70" x2="52" y2="70" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="90" x2="52" y2="90" stroke="#1a1612" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="cyl-text">
+          <div class="cyl-figure"><span class="counter" data-target="6.05" data-decimals="2" data-prefix="+">+0.00</span><span class="unit">%</span></div>
+          <div>
+            <div class="cyl-label">CAGR proyectado al 2029 — crecimiento sostenido del mercado MX</div>
+            <div class="cyl-source">FUENTE / MORDOR INTELLIGENCE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAT 3 -->
+      <div class="cyl-card">
+        <div class="cyl-svg-wrap">
+          <svg class="cyl-svg" viewBox="0 0 64 120" data-fill="0.34" aria-hidden="true">
+            <defs>
+              <clipPath id="cyl-clip-3">
+                <path d="M 12 12 L 12 108 Q 12 116 20 116 L 44 116 Q 52 116 52 108 L 52 12 Z"/>
+              </clipPath>
+            </defs>
+            <rect class="cyl-liquid" x="12" y="120" width="40" height="0" fill="#8b3a1f" fill-opacity="0.18" clip-path="url(#cyl-clip-3)"/>
+            <rect class="cyl-meniscus" x="12" y="120" width="40" height="2" fill="#8b3a1f" clip-path="url(#cyl-clip-3)"/>
+            <path class="cyl-outline" d="M 12 12 L 12 108 Q 12 116 20 116 L 44 116 Q 52 116 52 108 L 52 12" fill="none" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-rim" x1="8" y1="12" x2="56" y2="12" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-rim" x1="8" y1="9" x2="56" y2="9" stroke="#1a1612" stroke-width="1"/>
+            <line class="cyl-tick" x1="48" y1="30" x2="52" y2="30" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="50" x2="52" y2="50" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="70" x2="52" y2="70" stroke="#1a1612" stroke-width="0.6"/>
+            <line class="cyl-tick" x1="48" y1="90" x2="52" y2="90" stroke="#1a1612" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="cyl-text">
+          <div class="cyl-figure"><span class="counter" data-target="3" data-decimals="0">0</span><span class="unit">×</span></div>
+          <div>
+            <div class="cyl-label">Ingenieros en Biotecnología del ITESM detrás de cada fórmula</div>
+            <div class="cyl-source">FUENTE / TSC LABS R&amp;D</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ RUNNING HEAD / MARQUEE ============ -->
+<div class="runhead" aria-hidden="true">
+  <div class="runhead-track">
+    <span>FORMULACIÓN</span><span>MAQUILA</span><span>MARCA BLANCA</span><span>ENVASADO</span><span>BIOTECNOLOGÍA NATURAL</span><span>COFEPRIS</span><span>NOM-259-SSA1-2022</span><span>FORMULACIÓN</span><span>MAQUILA</span><span>MARCA BLANCA</span><span>ENVASADO</span><span>BIOTECNOLOGÍA NATURAL</span><span>COFEPRIS</span><span>NOM-259-SSA1-2022</span>
+  </div>
+</div>
+
+<!-- ============ § 02 — POR QUÉ TSC ============ -->
+<section class="paper" id="why">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-num">
+        <span class="n">№ 02</span>
+        <span class="lbl">Por qué TSC</span>
+        <span class="sub">Credenciales · Track record</span>
+      </div>
+      <div>
+        <h2 class="section-title">No somos una maquila más. Somos un <em>laboratorio</em> con marca propia ya validada en el mercado.</h2>
+        <p class="section-deck">
+          Tres ingenieros del ITESM operan TSC LABS bajo cumplimiento COFEPRIS, sosteniendo en paralelo una marca propia de skincare que compite — en formulación y precio — con los actores internacionales presentes en el retail mexicano.
+        </p>
+      </div>
+    </div>
+
+    <div class="why-grid reveal">
+
+      <div class="why-card">
+        <div class="why-num">№ 02.01 · INGENIERÍA</div>
+        <h3>Biotecnólogos <em>del ITESM</em></h3>
+        <p>
+          Los 3 fundadores son ingenieros en biotecnología graduados del Tec de Monterrey. Cada fórmula se desarrolla desde la interacción molecular de los activos: estabilidad, sinergia, eficacia comprobada. No copiamos formulaciones genéricas — las diseñamos.
+        </p>
+        <div class="foot">↳ R&amp;D propio · Investigación constante</div>
+      </div>
+
+      <a class="why-card why-card-link" href="#" target="_blank" rel="noopener" data-skinclub>
+        <div class="why-num">№ 02.02 · TRACK RECORD</div>
+        <h3>Marca propia <em>en mercado</em></h3>
+        <p>
+          Operamos The Skin Club desde 2021 — nuestra propia línea de skincare que compite directamente con Kiehl&apos;s, Clinique, L&apos;Oréal y The Ordinary, ganándoles en formulación y precio. Lo que proponemos para tu talento, ya lo demostramos con nosotros mismos.
+        </p>
+        <div class="foot">↳ Ver ecommerce The Skin Club</div>
+      </a>
+
+      <div class="why-card">
+        <div class="why-num">№ 02.03 · COMPLIANCE</div>
+        <h3>Permisos <em>COFEPRIS</em></h3>
+        <p>
+          Instalaciones que cumplen NOM-259-SSA1-2022 (Buenas Prácticas de Fabricación), NOM-141-SSA1/SCFI-2012 (Etiquetado) y NOM-089-SSA1-1994 (Contenido microbiano). Te asesoramos en todo el cumplimiento regulatorio para que tu marca pueda venderse legalmente.
+        </p>
+        <div class="foot">↳ 3 NOMs · Listos para retail</div>
+      </div>
+
+    </div>
+
+    <div class="caption fn2">
+      Buenas Prácticas de Fabricación bajo NOM-259-SSA1-2022 implican validación de instalaciones, control microbiológico de cada lote, trazabilidad de materias primas y conservación documental por 5 años. Sin estos permisos un producto no puede comercializarse legalmente en retail mexicano.
+    </div>
+  </div>
+</section>
+
+<!-- ============ § 03 — LA PRUEBA ============ -->
+<section class="paper" id="proof">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-num">
+        <span class="n">№ 03</span>
+        <span class="lbl">La prueba</span>
+        <span class="sub">Comparativa de mercado</span>
+      </div>
+      <div>
+        <h2 class="section-title">No te lo decimos. Te lo <em>demostramos</em>.</h2>
+        <p class="section-deck">
+          Categoría por categoría, contrastamos los productos estrella de las marcas más vendidas en México contra The Skin Club — la línea que TSC LABS formula y vende al consumidor final.
+        </p>
+      </div>
+    </div>
+
+    <p class="proof-deck reveal">
+      Tomamos los productos estrella de las marcas de skincare más vendidas en México y los comparamos contra <em>The Skin Club</em> — la marca que nosotros mismos formulamos y vendemos al consumidor final. Mismas categorías, mismos activos, mismos resultados. La diferencia está en el costo por mililitro y en lo que <em>no</em> incluimos en la fórmula.
+    </p>
+
+    <div class="proof-tbl reveal">
+
+      <div class="cat-head">
+        <div>Producto / Fórmula</div>
+        <div>Precio MXN</div>
+        <div>$ / mL</div>
+        <div>Observación</div>
+      </div>
+
+      <!-- Category I — HydroGlow -->
+      <div class="cat-block">
+        <div class="cat-title">Categoría № 03.01 → Suero de ácido hialurónico</div>
+
+        <div class="tbl-row tsc">
+          <div>
+            <div class="brand">The Skin Club · HydroGlow</div>
+            <div class="desc">2 tipos de ác. hialurónico + niacinamida + jojoba · airless</div>
+          </div>
+          <div class="price">$650</div>
+          <div class="perml">$21.6 / mL</div>
+          <div class="verdict">Fórmula equivalente a $1,800 — al precio de Kiehl&apos;s</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Clinique</div>
+            <div class="desc">Suero facial antiedad SMART</div>
+          </div>
+          <div class="price">$1,800</div>
+          <div class="perml">$60 / mL</div>
+          <div class="verdict">No publican lista completa de ingredientes</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Kiehl&apos;s</div>
+            <div class="desc">Ultra Pure High-Potency Serum 1.5%</div>
+          </div>
+          <div class="price">$650</div>
+          <div class="perml">$21.6 / mL</div>
+          <div class="verdict">Sin niacinamida · gotero básico</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">L&apos;Oréal</div>
+            <div class="desc">Suero Revitalift</div>
+          </div>
+          <div class="price">$198</div>
+          <div class="perml">$7 / mL</div>
+          <div class="verdict">Contiene fenoxietanol + clorfenesina</div>
+        </div>
+      </div>
+
+      <!-- Category II — HydroGlow Noche -->
+      <div class="cat-block">
+        <div class="cat-title">Categoría № 03.02 → Crema de noche / regeneradora</div>
+
+        <div class="tbl-row tsc">
+          <div>
+            <div class="brand">The Skin Club · HydroGlow Noche</div>
+            <div class="desc">Tetrapéptidos + vigna aconitifolia (= retinol 2.5% sin irritar)</div>
+          </div>
+          <div class="price">$699</div>
+          <div class="perml">$13.98 / mL</div>
+          <div class="verdict">5× más accesible que Lancôme · activos superiores</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Lancôme</div>
+            <div class="desc">Advanced Génifique Night</div>
+          </div>
+          <div class="price">$2,200</div>
+          <div class="perml">$44 / mL</div>
+          <div class="verdict">Buenos activos · presentación lujo</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Clinique</div>
+            <div class="desc">Superdefense Night</div>
+          </div>
+          <div class="price">$1,399</div>
+          <div class="perml">$27.98 / mL</div>
+          <div class="verdict">Contiene fenoxietanol</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Mario Badescu</div>
+            <div class="desc">Seaweed Night Cream</div>
+          </div>
+          <div class="price">$374</div>
+          <div class="perml">$13.35 / mL</div>
+          <div class="verdict">Parabenos + fenoxietanol + colorantes</div>
+        </div>
+      </div>
+
+      <!-- Category III — DeepCleanse -->
+      <div class="cat-block">
+        <div class="cat-title">Categoría № 03.03 → Dermolimpiador facial espumador</div>
+
+        <div class="tbl-row tsc">
+          <div>
+            <div class="brand">The Skin Club · DeepCleanse</div>
+            <div class="desc">3 versiones por tipo de piel · sin sulfatos</div>
+          </div>
+          <div class="price">$359</div>
+          <div class="perml">$2.40 / mL</div>
+          <div class="verdict">La mitad del precio de Clarins · sin sulfatos</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Clarins</div>
+            <div class="desc">Espuma Limpiadora</div>
+          </div>
+          <div class="price">$700</div>
+          <div class="perml">$4.60 / mL</div>
+          <div class="verdict">Buena fórmula · no segmenta por tipo de piel</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Clinique</div>
+            <div class="desc">All About Clean</div>
+          </div>
+          <div class="price">$590</div>
+          <div class="perml">$2.95 / mL</div>
+          <div class="verdict">Contiene sulfatos irritantes</div>
+        </div>
+        <div class="tbl-row">
+          <div>
+            <div class="brand">Mario Badescu</div>
+            <div class="desc">Glycolic Foaming Cleanser</div>
+          </div>
+          <div class="price">$449</div>
+          <div class="perml">$2.53 / mL</div>
+          <div class="verdict">Sulfatos + fenoxietanol + polímeros</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="caption fn3">
+      Precios consultados en abril 2026 en Palacio de Hierro y Sephora MX. Activos verificados en lista INCI publicada por cada marca; ausencia de ingrediente reportada cuando la marca no publica lista completa.
+    </div>
+  </div>
+</section>
+
+<!-- ============ § 04 — BLACKLIST · TABLA PERIÓDICA ============ -->
+<section class="paper" id="blacklist">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-num">
+        <span class="n">№ 04</span>
+        <span class="lbl">Lo que no usamos</span>
+        <span class="sub">Tabla de exclusión</span>
+      </div>
+      <div>
+        <h2 class="section-title">La diferencia <em>no</em> está en lo que añadimos. Está en lo que <em>nos negamos</em> a poner.</h2>
+        <p class="section-deck">
+          Cada celda lista un ingrediente que descartamos y la alternativa que lo sustituye. Pasa el cursor — o toca — sobre cualquier celda para revertir la sustitución.
+        </p>
+      </div>
+    </div>
+
+    <p class="blacklist-deck reveal">
+      Las grandes marcas siguen usando ingredientes baratos asociados a alergias, disrupción hormonal y daño ambiental — solo porque <em>reducen el costo de fabricación</em>. Nosotros los sustituimos por alternativas más seguras, sin negociar la calidad de la fórmula.
+    </p>
+
+    <div class="periodic reveal">
+
+      <!-- Element 1 — Parabenos -->
+      <div class="pt-card" data-pt="1" tabindex="0" role="button" aria-pressed="false" aria-label="Parabenos: alternativa Sorbato de potasio · alcohol bencílico">
+        <div class="pt-toggle">TOX → ALT</div>
+        <div>
+          <div class="pt-num">№ 04.01</div>
+          <div class="pt-symbol">Pa</div>
+        </div>
+        <div>
+          <div class="pt-state tox">
+            <div class="pt-name">Parabenos</div>
+            <div class="pt-fn">CONSERVADOR</div>
+          </div>
+          <div class="pt-state alt">
+            <div class="pt-name">Sorbato de potasio · alcohol bencílico</div>
+            <div class="pt-fn">↳ ALTERNATIVA TSC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Element 2 — SLS -->
+      <div class="pt-card" data-pt="2" tabindex="0" role="button" aria-pressed="false" aria-label="Lauret sulfato de sodio: alternativa Sulfoacetato de sodio">
+        <div class="pt-toggle">TOX → ALT</div>
+        <div>
+          <div class="pt-num">№ 04.02</div>
+          <div class="pt-symbol">SLs</div>
+        </div>
+        <div>
+          <div class="pt-state tox">
+            <div class="pt-name">Lauret sulfato de sodio</div>
+            <div class="pt-fn">ESPUMANTE</div>
+          </div>
+          <div class="pt-state alt">
+            <div class="pt-name">Sulfoacetato de sodio</div>
+            <div class="pt-fn">↳ ALTERNATIVA TSC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Element 3 — Siloxanos -->
+      <div class="pt-card" data-pt="3" tabindex="0" role="button" aria-pressed="false" aria-label="Ciclopentasiloxano y dimeticonas: alternativa Capril caprilato triglicer · gomas naturales · hialurónico">
+        <div class="pt-toggle">TOX → ALT</div>
+        <div>
+          <div class="pt-num">№ 04.03</div>
+          <div class="pt-symbol">Si</div>
+        </div>
+        <div>
+          <div class="pt-state tox">
+            <div class="pt-name">Ciclopentasiloxano · Dimeticonas</div>
+            <div class="pt-fn">VISCOSIDAD · TEXTURA</div>
+          </div>
+          <div class="pt-state alt">
+            <div class="pt-name">Capril caprilato triglicer · gomas naturales · hialurónico</div>
+            <div class="pt-fn">↳ ALTERNATIVA TSC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Element 4 — Fragancias sintéticas -->
+      <div class="pt-card" data-pt="4" tabindex="0" role="button" aria-pressed="false" aria-label="Fragancias sintéticas: alternativa Extractos naturales funcionales">
+        <div class="pt-toggle">TOX → ALT</div>
+        <div>
+          <div class="pt-num">№ 04.04</div>
+          <div class="pt-symbol">Fr</div>
+        </div>
+        <div>
+          <div class="pt-state tox">
+            <div class="pt-name">Fragancias sintéticas</div>
+            <div class="pt-fn">OLOR</div>
+          </div>
+          <div class="pt-state alt">
+            <div class="pt-name">Extractos naturales funcionales</div>
+            <div class="pt-fn">↳ ALTERNATIVA TSC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Element 5 — Fenoxietanol -->
+      <div class="pt-card" data-pt="5" tabindex="0" role="button" aria-pressed="false" aria-label="Fenoxietanol y clorfenesina: alternativa Sistemas conservantes ECOCERT compatibles">
+        <div class="pt-toggle">TOX → ALT</div>
+        <div>
+          <div class="pt-num">№ 04.05</div>
+          <div class="pt-symbol">Fx</div>
+        </div>
+        <div>
+          <div class="pt-state tox">
+            <div class="pt-name">Fenoxietanol · Clorfenesina</div>
+            <div class="pt-fn">CONSERVADOR AGRESIVO</div>
+          </div>
+          <div class="pt-state alt">
+            <div class="pt-name">Sistemas conservantes ECOCERT compatibles</div>
+            <div class="pt-fn">↳ ALTERNATIVA TSC</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pt-legend">
+      <div><strong>TOX</strong> &nbsp;Ingrediente excluido del catálogo TSC</div>
+      <div><strong>ALT</strong> &nbsp;Reemplazo formulado por nuestro R&amp;D</div>
+      <div>HOVER · TAP · KEYBOARD ENTER</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ § 05 — SERVICIOS ============ -->
+<section class="paper" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-num">
+        <span class="n">№ 05</span>
+        <span class="lbl">Servicios</span>
+        <span class="sub">Modelos de colaboración</span>
+      </div>
+      <div>
+        <h2 class="section-title">Cuatro caminos para construir <em>la marca</em> de tu talento.</h2>
+        <p class="section-deck">
+          De la fórmula validada al envasado integral. Cada modelo se acompaña de cumplimiento regulatorio, control de lotes y trazabilidad documental.
+        </p>
+      </div>
+    </div>
+
+    <div class="svc-grid reveal">
+
+      <div class="svc">
+        <div class="svc-num">01</div>
+        <div class="svc-body">
+          <h4><em>Marca</em> Blanca</h4>
+          <p>Eliges productos directamente de nuestro catálogo de fórmulas validadas y los envasamos con tu marca. El camino más rápido al mercado: arrancas con fórmulas que ya sabemos que funcionan.</p>
+          <div class="ideal"><strong>IDEAL PARA →</strong><span class="who">Talentos que quieren lanzar rápido y validar mercado</span></div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">02</div>
+        <div class="svc-body">
+          <h4><em>Formulación</em> a medida</h4>
+          <p>Diseñamos desde cero la fórmula exacta que tu talento necesita: textura, activos, claims, tipo de piel. Investigación, prototipado, iteración hasta llegar al producto perfecto.</p>
+          <div class="ideal"><strong>IDEAL PARA →</strong><span class="who">Talentos con concept claro o necesidades únicas</span></div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">03</div>
+        <div class="svc-body">
+          <h4><em>Maquila</em> exclusiva</h4>
+          <p>Ya tienes la fórmula (propia o de un químico previo) y necesitas producirla con calidad y escala. Fabricamos respetando confidencialidad total y manteniendo nuestros estándares de calidad.</p>
+          <div class="ideal"><strong>IDEAL PARA →</strong><span class="who">Marcas con IP propia que necesitan capacidad de producción</span></div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">04</div>
+        <div class="svc-body">
+          <h4><em>Envasado</em> integral</h4>
+          <p>Te apoyamos en la búsqueda y selección de envases primarios, secundarios, etiquetas, cumplimiento NOM-141 — todo el proceso para que el producto salga listo para vender en retail o e-commerce.</p>
+          <div class="ideal"><strong>IDEAL PARA →</strong><span class="who">Marcas que requieren acompañamiento end-to-end</span></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ § 06 — CONTACTO (CTA) ============ -->
+<section class="contact-wrap" id="contact">
+  <div class="container">
+    <div class="section-head reveal" style="margin-bottom: 0; padding-bottom: 0; border-bottom: 0;">
+      <div class="section-num">
+        <span class="n">№ 06</span>
+        <span class="lbl">Contacto</span>
+        <span class="sub">Siguiente paso</span>
+      </div>
+      <div>
+        <div class="contact-eyebrow">Siguiente paso · Brief inicial</div>
+        <h2 class="contact-title">Agenda una reunión.<br>Lleguemos al <em>brief</em> de tu talento.</h2>
+      </div>
+    </div>
+
+    <div class="channels reveal">
+      <a href="tel:+523333016642" class="channel">
+        <div class="ch-label">↳ Teléfono directo <span class="ch-arrow">↗</span></div>
+        <div class="ch-value">33 3301 6642</div>
+      </a>
+      <a href="https://wa.me/523333016642" class="channel" target="_blank" rel="noopener">
+        <div class="ch-label">↳ WhatsApp <span class="ch-arrow">↗</span></div>
+        <div class="ch-value">33 3301 6642</div>
+      </a>
+      <a href="mailto:contacto@tsc-labs.com.mx" class="channel">
+        <div class="ch-label">↳ Email <span class="ch-arrow">↗</span></div>
+        <div class="ch-value">contacto@<br>tsc-labs.com.mx</div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ TICK ROW ============ -->
+<div class="tick-row" aria-hidden="true">
+  <span>FIN · DOSSIER № TSC-2026/01</span>
+  <span>R-N-C-T-L</span>
+  <span>VER. 1.0 · ABR 2026</span>
+</div>
+
+<!-- ============ COLOPHON / FOOTER ============ -->
+<footer class="colophon">
+  <div class="left"><strong>TSC LABS</strong> · Bocana 2692 · Zapopan, Jalisco · México</div>
+  <div class="right">DOSSIER № TSC-2026/01 · CONFIDENCIAL</div>
+</footer>
+
+
+<!-- ============ GSAP ============ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+
+<script>
+(() => {
+  'use strict';
+
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MOBILE  = window.matchMedia('(max-width: 768px)').matches;
+
+  /* ========== Reveal via IntersectionObserver (CSS transitions) ========== */
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => io.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('in'));
+  }
+
+  /* ========== Bail out for reduced-motion: keep static, no GSAP ========== */
+  if (REDUCED) {
+    // Make sure stat figures show their final values
+    document.querySelectorAll('.counter').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const dec = parseInt(el.dataset.decimals || '0', 10);
+      const prefix = el.dataset.prefix || '';
+      el.textContent = prefix + target.toFixed(dec);
+    });
+    // Fill cylinders to final
+    document.querySelectorAll('.cyl-svg').forEach(svg => {
+      const fill = parseFloat(svg.dataset.fill || '0.5');
+      const liquid = svg.querySelector('.cyl-liquid');
+      const meniscus = svg.querySelector('.cyl-meniscus');
+      // viewBox 0 0 64 120, top of usable area ~12, bottom ~116, height ~104
+      const top = 12, bot = 116, range = bot - top;
+      const h = range * fill;
+      const y = bot - h;
+      if (liquid) { liquid.setAttribute('y', y); liquid.setAttribute('height', h); }
+      if (meniscus) { meniscus.setAttribute('y', y); }
+    });
+    return;
+  }
+
+  /* ========== GSAP setup ========== */
+  if (typeof gsap === 'undefined') return;
+
+  if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+  if (window.DrawSVGPlugin) gsap.registerPlugin(DrawSVGPlugin);
+  if (window.Flip) gsap.registerPlugin(Flip);
+  if (window.SplitText) gsap.registerPlugin(SplitText);
+
+  /* ========== Hero h1 — SplitText only here, lines mask reveal ========== */
+  try {
+    const h1 = document.querySelector('.hero-title');
+    if (h1 && window.SplitText) {
+      const split = new SplitText(h1, { type: 'lines', linesClass: 'split-line' });
+      // wrap each line for mask
+      split.lines.forEach(line => {
+        const wrap = document.createElement('span');
+        wrap.style.display = 'block';
+        wrap.style.overflow = 'hidden';
+        line.parentNode.insertBefore(wrap, line);
+        wrap.appendChild(line);
+      });
+      gsap.from(split.lines, {
+        yPercent: 110,
+        duration: 1.0,
+        stagger: 0.08,
+        ease: 'power3.out',
+        delay: 0.15
+      });
+    }
+  } catch (e) { /* noop */ }
+
+  /* ========== Hero annotation lines (DrawSVG) ========== */
+  try {
+    if (window.DrawSVGPlugin) {
+      const annot = document.querySelector('.hero-annot');
+      if (annot) {
+        gsap.set(annot.querySelectorAll('line'), { drawSVG: '0%' });
+        gsap.to(annot.querySelector('.annot-l'), { drawSVG: '100%', duration: 1.4, ease: 'power2.out', delay: 0.4 });
+        gsap.to([annot.querySelector('.annot-t1'), annot.querySelector('.annot-t2'), annot.querySelector('.annot-t3'), annot.querySelector('.annot-t4'), annot.querySelector('.annot-t5')], {
+          drawSVG: '100%', duration: 0.5, stagger: 0.12, ease: 'power2.out', delay: 0.85
+        });
+      }
+    }
+  } catch (e) { /* noop */ }
+
+  /* ========== Cylinder fill — animate liquid level ========== */
+  function animateCylinder(svg, delay) {
+    const fill = parseFloat(svg.dataset.fill || '0.5');
+    const liquid = svg.querySelector('.cyl-liquid');
+    const meniscus = svg.querySelector('.cyl-meniscus');
+    const top = 12, bot = 116, range = bot - top;
+    const h = range * fill;
+    const targetY = bot - h;
+    if (liquid) {
+      gsap.set(liquid, { attr: { y: bot, height: 0 } });
+      gsap.to(liquid, {
+        attr: { y: targetY, height: h },
+        duration: 1.4,
+        ease: 'power2.out',
+        delay: delay
+      });
+    }
+    if (meniscus) {
+      gsap.set(meniscus, { attr: { y: bot } });
+      gsap.to(meniscus, {
+        attr: { y: targetY },
+        duration: 1.4,
+        ease: 'power2.out',
+        delay: delay
+      });
+    }
+  }
+
+  /* ========== Stat counters — count from 0 to target ========== */
+  function animateCounter(el, delay) {
+    const target = parseFloat(el.dataset.target);
+    const dec = parseInt(el.dataset.decimals || '0', 10);
+    const prefix = el.dataset.prefix || '';
+    const obj = { v: 0 };
+    el.textContent = prefix + (0).toFixed(dec);
+    gsap.to(obj, {
+      v: target,
+      duration: 1.6,
+      delay: delay,
+      ease: 'power2.out',
+      onUpdate: () => {
+        el.textContent = prefix + obj.v.toFixed(dec);
+      }
+    });
+  }
+
+  /* Animate cylinders + counters when hero-right enters viewport (or on load) */
+  const heroRight = document.querySelector('.hero-right');
+  if (heroRight && window.ScrollTrigger) {
+    ScrollTrigger.create({
+      trigger: heroRight,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => {
+        document.querySelectorAll('.cyl-svg').forEach((svg, i) => animateCylinder(svg, 0.15 + i * 0.12));
+        document.querySelectorAll('.counter').forEach((el, i) => animateCounter(el, 0.25 + i * 0.12));
+      }
+    });
+  } else {
+    // fallback: kick after small delay
+    setTimeout(() => {
+      document.querySelectorAll('.cyl-svg').forEach((svg, i) => animateCylinder(svg, i * 0.12));
+      document.querySelectorAll('.counter').forEach((el, i) => animateCounter(el, i * 0.12));
+    }, 400);
+  }
+
+  /* ========== Periodic table — Flip on hover/click toxic↔alt ========== */
+  document.querySelectorAll('.pt-card').forEach(card => {
+    const toggle = () => {
+      if (window.Flip) {
+        const state = Flip.getState(card.querySelectorAll('.pt-state, .pt-symbol, .pt-name'));
+        card.classList.toggle('flipped');
+        Flip.from(state, {
+          duration: 0.32,
+          ease: 'power2.inOut',
+          absolute: true,
+          fade: true
+        });
+      } else {
+        card.classList.toggle('flipped');
+      }
+      card.setAttribute('aria-pressed', card.classList.contains('flipped'));
+    };
+    // Hover (desktop only — handled via CSS would interfere; do JS for non-touch)
+    if (!MOBILE && matchMedia('(hover: hover)').matches) {
+      card.addEventListener('mouseenter', () => {
+        if (!card.classList.contains('flipped')) toggle();
+      });
+      card.addEventListener('mouseleave', () => {
+        if (card.classList.contains('flipped')) toggle();
+      });
+    }
+    // Click / tap / keyboard
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  /* ========== Magnetic hover on contact channels (subtle) ========== */
+  if (!MOBILE && matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.channel').forEach(ch => {
+      const STR = 0.18;
+      let rect = null;
+      const enter = () => { rect = ch.getBoundingClientRect(); };
+      const move = (e) => {
+        if (!rect) rect = ch.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(ch, { x: x * STR, y: y * STR, duration: 0.4, ease: 'power3.out' });
+      };
+      const leave = () => {
+        gsap.to(ch, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+        rect = null;
+      };
+      ch.addEventListener('mouseenter', enter);
+      ch.addEventListener('mousemove', move);
+      ch.addEventListener('mouseleave', leave);
+    });
+  }
+
+  /* ========== ScrollTrigger refresh on resize is automatic; nothing to bind ========== */
+
+})();
+</script>
+
+</body>
+</html>
