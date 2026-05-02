@@ -2303,12 +2303,15 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-size: 11px;
 }
 
-/* Hero — asymmetric, monumental */
+/* Hero — asymmetric, monumental, properly contained */
 .v2-mode .hero {
   position: relative;
   overflow: hidden;
   min-height: 100vh;
-  padding: 120px 0 80px !important;
+  padding: calc(var(--topbar-h) + 80px) var(--gutter) 100px !important;
+  max-width: var(--max);
+  margin: 0 auto;
+  border-bottom: none !important;
 }
 .v2-mode .hero::before {
   content: '';
