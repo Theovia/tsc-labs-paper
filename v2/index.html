@@ -2152,15 +2152,246 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   .creds-bar { grid-template-columns: repeat(2, 1fr); }
   .creds-bar > div { border-bottom: 1px solid var(--line); }
 }
+
+/* ============ V2 OVERRIDES — fluid, minimal, pharma-premium ============ */
+.v2-mode {
+  --paper: #ffffff;
+  --paper-deep: #f7f7f4;
+  --ink: #0c0c0d;
+  --ink-soft: #4a4a48;
+  --ink-faint: #8a8a85;
+  --line: #ececea;
+  --line-soft: #f4f4f1;
+  --rust: #c8643c;
+  --hl: #f3f0eb;
+  --serif-disp: 'Fraunces', Georgia, serif;
+  --serif-body: 'Inter Tight', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  background: #ffffff;
+  font-family: 'Inter Tight', -apple-system, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+/* V2 toggle floating bottom-right */
+.v2-mode .v2-toggle {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 9998;
+  background: #0c0c0d;
+  color: #fff;
+  padding: 10px 18px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 999px;
+  transition: transform 0.3s ease;
+}
+.v2-mode .v2-toggle:hover { transform: scale(1.06); }
+
+/* Kill film grain overlay (clean clinical bg) */
+.v2-mode body::before { display: none; }
+
+/* Section scaffolding — drop borders, more breathing */
+.v2-mode section.paper {
+  border-bottom: none;
+  padding: 140px 0;
+}
+.v2-mode .runhead { display: none; }
+
+/* Topbar minimal */
+.v2-mode .topbar {
+  border-bottom: none;
+  padding: 28px 40px;
+  background: transparent;
+}
+.v2-mode .topbar-inner { font-weight: 500; }
+
+/* Hero stat ledger — flowing not boxed */
+.v2-mode .stat-ledger {
+  border: none !important;
+  background: transparent;
+}
+.v2-mode .cyl-card {
+  border: none !important;
+  border-bottom: 1px solid var(--line) !important;
+  padding: 28px 0 !important;
+  background: transparent;
+}
+.v2-mode .cyl-card:last-child { border-bottom: none !important; }
+
+/* Section heads — bigger, looser */
+.v2-mode .section-head { gap: 80px; padding-bottom: 60px; }
+.v2-mode .section-num { border-left: 2px solid var(--rust); padding-left: 22px; }
+.v2-mode .section-num .n {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.20em;
+  color: var(--rust);
+  font-weight: 600;
+}
+.v2-mode .section-num .lbl {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--ink);
+  margin-top: 6px;
+}
+.v2-mode .section-num .sub {
+  font-family: var(--serif-body);
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+.v2-mode .section-title {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(38px, 5vw, 68px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.v2-mode .section-deck {
+  font-family: var(--serif-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  font-weight: 400;
+  max-width: 60ch;
+}
+
+/* CATALOG — horizontal snap-scroll carousel (fluid) */
+.v2-mode .catalog-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 24px;
+  padding: 4px 40px 60px;
+  margin: 0 -40px;
+  border: none;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-faint) transparent;
+}
+.v2-mode .catalog-grid::-webkit-scrollbar { height: 6px; }
+.v2-mode .catalog-grid::-webkit-scrollbar-thumb {
+  background: var(--ink-faint);
+  border-radius: 3px;
+}
+.v2-mode .cat-item {
+  flex: 0 0 340px;
+  scroll-snap-align: start;
+  border: none !important;
+  border-radius: 18px;
+  background: var(--paper-deep) !important;
+  padding: 32px 28px 36px !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(.2,.7,.2,1), background 0.4s ease;
+}
+.v2-mode .cat-item::before {
+  background: radial-gradient(120% 80% at 100% 0%, var(--anim-color, var(--rust)) 0%, transparent 65%) !important;
+  opacity: 0.10 !important;
+  border-radius: 18px;
+}
+.v2-mode .cat-item:hover {
+  background: var(--paper-deep) !important;
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px -16px rgba(12, 12, 13, 0.18);
+}
+.v2-mode .cat-item:hover::before { opacity: 0.20 !important; }
+.v2-mode .cat-item .cat-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--anim-color, var(--ink-faint)) !important;
+  font-weight: 600;
+}
+.v2-mode .cat-item h4 {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  color: var(--ink) !important;
+  font-size: clamp(24px, 2vw, 30px) !important;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px !important;
+}
+.v2-mode .cat-item .cat-variants {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--anim-color, var(--rust)) !important;
+  font-weight: 600;
+}
+.v2-mode .cat-item .cat-actives {
+  font-family: var(--serif-body) !important;
+  font-style: normal !important;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-soft) !important;
+}
+.v2-mode .cat-anim {
+  width: 78px !important;
+  height: 78px !important;
+  opacity: 0.8 !important;
+}
+.v2-mode .cat-item:hover .cat-anim { opacity: 1 !important; transform: scale(1.05); }
+
+/* Periodic blacklist cards — softer */
+.v2-mode .periodic .pt-card {
+  border: 1px solid var(--line) !important;
+  border-radius: 14px;
+  background: var(--paper-deep) !important;
+}
+
+/* Process / Team / Catalog sections — drop hard grid borders */
+.v2-mode .process,
+.v2-mode .team-grid,
+.v2-mode .creds-bar {
+  border: none !important;
+  gap: 1px;
+  background: var(--line);
+}
+.v2-mode .proc-step,
+.v2-mode .team-card,
+.v2-mode .creds-bar > div {
+  border: none !important;
+  background: var(--paper) !important;
+}
+
+/* Modal — frosted card, no harsh borders */
+.v2-mode .cat-modal .panel {
+  border: none !important;
+  border-radius: 20px !important;
+  border-top: 6px solid var(--anim-color) !important;
+  box-shadow: 0 40px 100px -30px rgba(12, 12, 13, 0.40) !important;
+}
+
+/* Footer */
+.v2-mode .colophon {
+  border-top: 1px solid var(--line);
+  padding: 40px 40px;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* Hero h1 — Fraunces light italic accent on key word */
+.v2-mode .hero h1 {
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+.v2-mode .hero h1 em {
+  font-style: italic;
+  color: var(--rust);
+  font-weight: 400;
+}
 </style>
 </head>
 
-<body>
-<div style="position:fixed;top:0;left:0;right:0;z-index:9998;background:#1a1612;color:#fafaf7;padding:6px 14px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;">
-  <span>V2 · ITERACIÓN — bg hueso · probetas multicolor</span>
-  <a href="/" style="color:#fafaf7;text-decoration:underline;">↩ V1 (rust/paper)</a>
-</div>
-<div style="height:28px"></div>
+<body class="v2-mode">
+<a href="/" class="v2-toggle">↩ V1</a>
 
 <!-- ============ TOPBAR ============ -->
 <header class="topbar">
