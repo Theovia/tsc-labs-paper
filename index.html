@@ -1593,9 +1593,9 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   color: var(--ink-faint);
   text-transform: uppercase;
   margin-bottom: 14px;
-  transition: color 0.35s ease, letter-spacing 0.45s ease;
+  transition: color 0.35s ease;
 }
-.cat-item:hover .cat-num { color: var(--rust); letter-spacing: 0.26em; }
+.cat-item:hover .cat-num { color: var(--rust); }
 .cat-item h4 {
   font-family: var(--serif-disp);
   font-weight: 400;
@@ -1664,7 +1664,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   .cat-item h4 { padding-right: 58px; }
 }
 
-.cat-item { cursor: pointer; isolation: isolate; }
+.cat-item { cursor: pointer; }
 .cat-item::before {
   content: '';
   position: absolute;
@@ -1673,12 +1673,11 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     radial-gradient(80% 100% at 90% 10%, var(--anim-color, var(--rust)) 0%, transparent 65%),
     linear-gradient(135deg, transparent 40%, var(--anim-color, var(--rust)) 130%);
   opacity: 0;
-  transition: opacity 0.55s ease;
+  transition: opacity 0.45s ease;
   pointer-events: none;
-  mix-blend-mode: multiply;
-  z-index: -1;
 }
-.cat-item:hover::before { opacity: 0.18; }
+.cat-item > * { position: relative; }
+.cat-item:hover::before { opacity: 0.16; }
 .cat-item:focus-visible {
   outline: 2px solid var(--rust);
   outline-offset: 4px;
