@@ -1766,10 +1766,15 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   margin: 0 0 32px;
   background: var(--paper-deep);
 }
-.cat-modal .m-anim-wrap svg {
+.cat-modal .m-anim-wrap svg.cat-anim {
+  position: static;
+  top: auto;
+  right: auto;
+  opacity: 1;
   width: 180px;
   height: 180px;
   filter: drop-shadow(0 2px 6px rgba(26, 22, 18, 0.12));
+  transition: none;
 }
 .cat-modal .m-anim-wrap svg .a-shape {
   fill: var(--anim-color, var(--rust));
