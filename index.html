@@ -43,7 +43,7 @@
   --topbar-h:     56px;
 }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 
 body {
   font-family: var(--serif-body);
@@ -1704,7 +1704,9 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 .cat-modal .panel {
   position: relative;
   background: var(--paper);
-  border: 1px solid var(--ink);
+  border: 1px solid color-mix(in srgb, var(--anim-color) 30%, var(--line));
+  border-radius: 8px;
+  box-shadow: 0 24px 60px -20px rgba(26, 22, 18, 0.32);
   width: 100%;
   max-width: 820px;
   max-height: 92vh;
@@ -1713,6 +1715,51 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-family: var(--serif-body);
   --anim-color: var(--rust);
   border-top: 6px solid var(--anim-color);
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--anim-color) 35%, transparent) transparent;
+}
+.cat-modal .panel::-webkit-scrollbar { width: 6px; }
+.cat-modal .panel::-webkit-scrollbar-track { background: transparent; }
+.cat-modal .panel::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--anim-color) 35%, transparent);
+  border-radius: 3px;
+}
+.cat-modal .panel::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--anim-color) 55%, transparent);
+}
+
+/* Prev/Next product navigation */
+.cat-modal .nav-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--paper);
+  border: 1px solid color-mix(in srgb, var(--anim-color, var(--rust)) 40%, var(--line));
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-family: var(--serif-disp);
+  font-size: 28px;
+  line-height: 1;
+  color: var(--anim-color, var(--rust));
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 4px;
+  transition: background 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 4px 12px -2px rgba(26, 22, 18, 0.18);
+}
+.cat-modal .nav-btn:hover {
+  background: color-mix(in srgb, var(--anim-color, var(--rust)) 14%, var(--paper));
+  transform: translateY(-50%) scale(1.08);
+}
+.cat-modal .nav-btn.prev { left: max(24px, calc(50vw - 460px)); }
+.cat-modal .nav-btn.next { right: max(24px, calc(50vw - 460px)); }
+@media (max-width: 880px) {
+  .cat-modal .nav-btn.prev { left: 12px; }
+  .cat-modal .nav-btn.next { right: 12px; }
 }
 .cat-modal .close {
   position: absolute;
@@ -3030,6 +3077,8 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 <!-- Catalog detail modal -->
 <div class="cat-modal" id="catModal" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="bg" data-close></div>
+  <button class="nav-btn prev" id="catNavPrev" aria-label="Producto anterior">‹</button>
+  <button class="nav-btn next" id="catNavNext" aria-label="Producto siguiente">›</button>
   <div class="panel">
     <button class="close" data-close aria-label="Cerrar">×</button>
     <div class="m-content"></div>
@@ -3733,15 +3782,21 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     if (modalOpener && modalOpener.focus) { modalOpener.focus(); modalOpener = null; }
   }
 
-  function openModal(numKey, animType, color) {
-    const d = CATALOG_DETAIL[numKey];
-    if (!d) return;
-    // Kill any running card timelines (iPad: tap on card opens modal but mouseleave doesn't fire)
-    cardTimelines.forEach(t => { try { t.kill(); } catch (e) {} });
-    cardTimelines.clear();
-    if (window.gsap) gsap.killTweensOf(modal);
+  // Build product map for nav (numKey → {type, color})
+  const PRODUCT_KEYS = Object.keys(CATALOG_DETAIL).sort();
+  const PRODUCT_MAP = {};
+  document.querySelectorAll('.cat-item').forEach(card => {
+    const numEl = card.querySelector('.cat-num');
+    const numKey = numEl ? numEl.textContent.replace(/[^0-9.]/g, '') : '';
+    if (numKey) PRODUCT_MAP[numKey] = {
+      type: card.dataset.anim,
+      color: card.style.getPropertyValue('--anim-color') || ''
+    };
+  });
 
-    modalOpener = document.activeElement;
+  function populateModalContent(numKey, animType, color) {
+    const d = CATALOG_DETAIL[numKey];
+    if (!d) return false;
     modalPanel.style.setProperty('--anim-color', color || 'var(--rust)');
 
     const variantsHtml = d.variants.map(([n,note]) => `<div class="v-row"><div class="v-name">${n}</div><div class="v-note">${note}</div></div>`).join('');
@@ -3770,6 +3825,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       </div>
     `;
 
+    if (modalAnimTl) { modalAnimTl.kill(); modalAnimTl = null; }
     if (animType && ANIMS[animType] && window.gsap) {
       const wrap = modalContent.querySelector('.m-anim-wrap');
       const s = mkSvg();
@@ -3780,32 +3836,75 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       modalAnimTl = ANIMS[animType].play(s);
     }
 
+    modal.dataset.currentKey = numKey;
+    modalPanel.scrollTop = 0;
+    return true;
+  }
+
+  function openModal(numKey, animType, color) {
+    if (!CATALOG_DETAIL[numKey]) return;
+    cardTimelines.forEach(t => { try { t.kill(); } catch (e) {} });
+    cardTimelines.clear();
+    if (window.gsap) gsap.killTweensOf(modal);
+
+    modalOpener = document.activeElement;
+    populateModalContent(numKey, animType, color);
+
     modal.dataset.open = 'true';
     modal.style.display = 'flex';
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    document.querySelectorAll('main, header, footer').forEach(el => el.setAttribute('inert', ''));
 
     modalTrapHandler = trapFocus;
     modal.addEventListener('keydown', modalTrapHandler);
 
     if (window.gsap) {
       gsap.fromTo(modal, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-      gsap.fromTo(modalPanel, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out', delay: 0.05 });
+      gsap.fromTo(modalPanel, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out', delay: 0.05 });
     }
 
-    // Focus the close button so SR + keyboard land inside modal
     requestAnimationFrame(() => {
       const closeBtn = modal.querySelector('.close');
       if (closeBtn) closeBtn.focus();
     });
   }
 
+  function navigateProduct(direction) {
+    const currentKey = modal.dataset.currentKey;
+    if (!currentKey) return;
+    const idx = PRODUCT_KEYS.indexOf(currentKey);
+    if (idx < 0) return;
+    const nextIdx = (idx + direction + PRODUCT_KEYS.length) % PRODUCT_KEYS.length;
+    const nextKey = PRODUCT_KEYS[nextIdx];
+    const meta = PRODUCT_MAP[nextKey] || {};
+
+    if (window.gsap) {
+      gsap.killTweensOf(modalContent);
+      gsap.to(modalContent, {
+        opacity: 0, x: -direction * 28, duration: 0.22, ease: 'power2.in',
+        onComplete: () => {
+          populateModalContent(nextKey, meta.type, meta.color);
+          gsap.fromTo(modalContent,
+            { opacity: 0, x: direction * 28 },
+            { opacity: 1, x: 0, duration: 0.32, ease: 'power3.out' });
+        }
+      });
+    } else {
+      populateModalContent(nextKey, meta.type, meta.color);
+    }
+  }
+
   modal.addEventListener('click', (e) => {
     if (e.target.dataset.close !== undefined) closeModal();
   });
+  document.getElementById('catNavPrev').addEventListener('click', () => navigateProduct(-1));
+  document.getElementById('catNavNext').addEventListener('click', () => navigateProduct(1));
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.dataset.open === 'true') closeModal();
+    if (modal.dataset.open !== 'true') return;
+    if (e.key === 'Escape') { closeModal(); return; }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigateProduct(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); navigateProduct(1); }
   });
 
   const finePointer = matchMedia('(pointer: fine)').matches;
