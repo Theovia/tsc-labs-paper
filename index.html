@@ -3229,20 +3229,45 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       }
     },
     blink: {
+      // Literal eye: lashes + almond outline + iris + pupil + highlight, blinks + dilates
       build: (s) => {
-        s.appendChild(svgEl('ellipse',{cx:50,cy:50,rx:32,ry:16,fill:'none','stroke-width':'1.4'}));
-        s.appendChild(svgEl('circle',{cx:50,cy:50,r:9,'fill-opacity':'0.45','stroke-width':'0'}));
-        s.appendChild(svgEl('circle',{cx:50,cy:50,r:4,'fill-opacity':'0.95','stroke-width':'0'}));
+        // 5 eyelashes on top (stay still)
+        const lashes = [[22,28,18,18],[35,18,33,8],[50,15,50,6],[65,18,67,8],[78,28,82,18]];
+        lashes.forEach(([x1,y1,x2,y2]) => {
+          s.appendChild(svgEl('line',{x1,y1,x2,y2,'stroke-width':'1.5','stroke-linecap':'round'}));
+        });
+        // Eye group (outline + iris + pupil + highlight) — blinks together
+        const g = svgEl('g',{});
+        // Almond eye outline
+        const outline = svgEl('path',{
+          d:'M14,50 Q50,22 86,50 Q50,78 14,50 Z',
+          'stroke-width':'1.6','stroke-linejoin':'round'
+        });
+        outline.style.fill = 'none';
+        g.appendChild(outline);
+        // Iris (anim-color)
+        g.appendChild(svgEl('circle',{cx:50,cy:50,r:14,'fill-opacity':'0.85','stroke-width':'0'}));
+        // Pupil (dark ink)
+        const pupil = svgEl('circle',{cx:50,cy:50,r:6,'stroke-width':'0'});
+        pupil.style.fill = '#1a1612';
+        g.appendChild(pupil);
+        // Highlight (paper)
+        const hl = svgEl('circle',{cx:46,cy:46,r:2.2,'stroke-width':'0','fill-opacity':'0.95'});
+        hl.style.fill = '#f6f1e7';
+        g.appendChild(hl);
+        s.appendChild(g);
       },
       play: (s) => {
-        const [, iris, pupil] = s.querySelectorAll('circle, ellipse');
-        const irisEl = s.querySelectorAll('circle')[0];
-        const pupilEl = s.querySelectorAll('circle')[1];
-        gsap.set([irisEl, pupilEl], { transformOrigin:'50% 50%' });
-        const tl = gsap.timeline({ repeat: -1 });
-        tl.to(irisEl, { scale: 1.15, duration: 1.1, ease: 'sine.inOut' }, 0)
-          .to(pupilEl, { scale: 0.7, duration: 1.1, ease: 'sine.inOut' }, 0)
-          .to([irisEl, pupilEl], { scale: 1, duration: 1.1, ease: 'sine.inOut' }, 1.1);
+        const g = s.querySelector('g');
+        const circles = g.querySelectorAll('circle');
+        const iris = circles[0], pupil = circles[1];
+        gsap.set(g, { transformOrigin: '50% 50%' });
+        gsap.set([iris, pupil], { transformOrigin: '50% 50%' });
+        const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.4 });
+        tl.to([iris, pupil], { scale: 1.08, duration: 0.7, ease: 'sine.inOut' }, 0)
+          .to([iris, pupil], { scale: 1, duration: 0.6, ease: 'sine.inOut' }, 0.7)
+          .to(g, { scaleY: 0.04, duration: 0.10, ease: 'power2.in' })
+          .to(g, { scaleY: 1, duration: 0.16, ease: 'power3.out' });
         return tl;
       }
     },
