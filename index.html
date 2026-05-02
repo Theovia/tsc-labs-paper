@@ -3229,45 +3229,61 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       }
     },
     blink: {
-      // Literal eye: lashes + almond outline + iris + pupil + highlight, blinks + dilates
+      // Contorno de Ojos: contour line draws (literal "contorno") + iris fades + visible blink
       build: (s) => {
-        // 5 eyelashes on top (stay still)
-        const lashes = [[22,28,18,18],[35,18,33,8],[50,15,50,6],[65,18,67,8],[78,28,82,18]];
-        lashes.forEach(([x1,y1,x2,y2]) => {
-          s.appendChild(svgEl('line',{x1,y1,x2,y2,'stroke-width':'1.5','stroke-linecap':'round'}));
-        });
-        // Eye group (outline + iris + pupil + highlight) — blinks together
         const g = svgEl('g',{});
-        // Almond eye outline
         const outline = svgEl('path',{
           d:'M14,50 Q50,22 86,50 Q50,78 14,50 Z',
-          'stroke-width':'1.6','stroke-linejoin':'round'
+          'stroke-width':'1.6','stroke-linejoin':'round','stroke-linecap':'round'
         });
         outline.style.fill = 'none';
         g.appendChild(outline);
-        // Iris (anim-color)
         g.appendChild(svgEl('circle',{cx:50,cy:50,r:14,'fill-opacity':'0.85','stroke-width':'0'}));
-        // Pupil (dark ink)
         const pupil = svgEl('circle',{cx:50,cy:50,r:6,'stroke-width':'0'});
         pupil.style.fill = '#1a1612';
         g.appendChild(pupil);
-        // Highlight (paper)
         const hl = svgEl('circle',{cx:46,cy:46,r:2.2,'stroke-width':'0','fill-opacity':'0.95'});
         hl.style.fill = '#f6f1e7';
         g.appendChild(hl);
         s.appendChild(g);
+        // Lashes (separate so they don't blink with eye group)
+        const lashes = [[22,28,18,18],[35,18,33,8],[50,15,50,6],[65,18,67,8],[78,28,82,18]];
+        lashes.forEach(([x1,y1,x2,y2]) => {
+          s.appendChild(svgEl('line',{x1,y1,x2,y2,'stroke-width':'1.5','stroke-linecap':'round'}));
+        });
       },
       play: (s) => {
         const g = s.querySelector('g');
+        const outline = g.querySelector('path');
         const circles = g.querySelectorAll('circle');
-        const iris = circles[0], pupil = circles[1];
+        const iris = circles[0], pupil = circles[1], hl = circles[2];
+        const lashes = s.querySelectorAll('line');
+
+        if (window.DrawSVGPlugin) gsap.set(outline, { drawSVG: '0% 0%' });
+        gsap.set([iris, pupil, hl], { scale: 0, transformOrigin: '50% 50%' });
+        gsap.set(lashes, { opacity: 0 });
         gsap.set(g, { transformOrigin: '50% 50%' });
-        gsap.set([iris, pupil], { transformOrigin: '50% 50%' });
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.4 });
-        tl.to([iris, pupil], { scale: 1.08, duration: 0.7, ease: 'sine.inOut' }, 0)
-          .to([iris, pupil], { scale: 1, duration: 0.6, ease: 'sine.inOut' }, 0.7)
-          .to(g, { scaleY: 0.04, duration: 0.10, ease: 'power2.in' })
-          .to(g, { scaleY: 1, duration: 0.16, ease: 'power3.out' });
+
+        const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
+        // 1. Draw contour line
+        if (window.DrawSVGPlugin) {
+          tl.to(outline, { drawSVG: '0% 100%', duration: 1.0, ease: 'power2.inOut' }, 0);
+        } else {
+          tl.fromTo(outline, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0);
+        }
+        // 2. Iris/pupil/highlight pop in
+        tl.to([iris, pupil, hl], { scale: 1, duration: 0.4, ease: 'back.out(1.6)', stagger: 0.06 }, 0.6);
+        // 3. Lashes fade in
+        tl.to(lashes, { opacity: 1, duration: 0.3, stagger: 0.04 }, 0.85);
+        // 4. Pupil dilation (subtle, real-feeling)
+        tl.to([iris, pupil], { scale: 1.06, duration: 0.6, ease: 'sine.inOut' }, 1.5)
+          .to([iris, pupil], { scale: 1, duration: 0.55, ease: 'sine.inOut' }, 2.1);
+        // 5. VISIBLE blink — longer hold so it reads
+        tl.to(g, { scaleY: 0.05, duration: 0.16, ease: 'power2.in' }, 2.85)
+          .to({}, { duration: 0.10 })
+          .to(g, { scaleY: 1, duration: 0.22, ease: 'power3.out' });
+        // 6. Hold open briefly before loop restarts
+        tl.to({}, { duration: 0.4 });
         return tl;
       }
     },
