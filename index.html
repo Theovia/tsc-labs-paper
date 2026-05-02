@@ -1577,11 +1577,13 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 .cat-item {
   border-right: 1px solid var(--ink);
   border-bottom: 1px solid var(--ink);
+  border-top: 4px solid var(--anim-color, var(--rust));
   padding: 22px 22px 26px;
   background: var(--paper);
   position: relative;
   transition: background 0.4s ease;
-  cursor: default;
+  cursor: pointer;
+  margin-top: -1px;
 }
 .cat-item:hover {
   background: var(--paper-deep);
@@ -1590,78 +1592,82 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.18em;
-  color: var(--ink-faint);
+  color: var(--anim-color, var(--rust));
   text-transform: uppercase;
-  margin-bottom: 14px;
-  transition: color 0.35s ease;
+  margin-bottom: 12px;
+  font-weight: 500;
 }
-.cat-item:hover .cat-num { color: var(--rust); }
 .cat-item h4 {
   font-family: var(--serif-disp);
   font-weight: 400;
-  font-size: clamp(20px, 2vw, 26px);
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  margin: 0 0 10px;
-  transition: color 0.4s ease, transform 0.45s ease;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--anim-color, var(--ink));
+  margin: 0 0 14px;
 }
-.cat-item:hover h4 { color: var(--rust); }
 .cat-item .cat-variants {
+  display: inline-block;
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--rust);
-  margin-bottom: 14px;
-  transition: opacity 0.4s ease;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--anim-color, var(--rust)) 14%, transparent);
+  padding: 5px 10px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  line-height: 1.4;
 }
 .cat-item .cat-actives {
   font-family: var(--serif-body);
   font-size: 14px;
-  line-height: 1.55;
-  color: var(--ink-soft);
+  line-height: 1.7;
+  color: var(--ink);
   font-style: italic;
 }
 .cat-actives .act {
   display: inline-block;
-  padding: 0 4px;
-  margin: 0 -2px;
-  border-radius: 2px;
-  background: transparent;
-  color: var(--ink-soft);
-  transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease;
-  transition-delay: calc(var(--i, 0) * 55ms);
-  transform: translateY(0);
+  padding: 1px 7px;
+  margin: 2px 1px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--anim-color, var(--rust)) 10%, transparent);
+  color: var(--ink);
+  transition: background 0.3s ease;
 }
-.cat-actives .act + .act::before { content: '·'; color: var(--ink-faint); margin: 0 6px; padding: 0; }
-.cat-item:hover .cat-actives .act { color: var(--ink); }
+.cat-actives .act + .act::before { content: ''; }
+.cat-item:hover .cat-actives .act {
+  background: color-mix(in srgb, var(--anim-color, var(--rust)) 22%, transparent);
+}
 
 /* Catalog illustration overlay */
 .cat-anim {
   position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 60px;
-  height: 60px;
+  top: 16px;
+  right: 16px;
+  width: 72px;
+  height: 72px;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  opacity: 0.75;
+  transition: opacity 0.4s ease, transform 0.4s ease;
   overflow: visible;
   filter: drop-shadow(0 1px 3px rgba(26, 22, 18, 0.10));
 }
-.cat-item:hover .cat-anim { opacity: 0.92; }
+.cat-item:hover .cat-anim {
+  opacity: 1;
+  transform: scale(1.08);
+}
 .cat-anim .a-shape {
   fill: var(--anim-color, var(--rust));
   stroke: var(--anim-color, var(--rust));
 }
 /* Reserve corner space so animation never collides with title */
-.cat-item .cat-num { padding-right: 72px; }
-.cat-item h4 { padding-right: 72px; min-height: 1.15em; }
+.cat-item .cat-num { padding-right: 86px; }
+.cat-item h4 { padding-right: 86px; min-height: 1.15em; }
 @media (max-width: 600px) {
-  .cat-anim { width: 48px; height: 48px; top: 14px; right: 14px; }
+  .cat-anim { width: 56px; height: 56px; top: 12px; right: 12px; }
   .cat-item .cat-num,
-  .cat-item h4 { padding-right: 58px; }
+  .cat-item h4 { padding-right: 68px; }
 }
 
 .cat-item { cursor: pointer; }
