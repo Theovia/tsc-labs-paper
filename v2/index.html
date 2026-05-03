@@ -2437,16 +2437,25 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 .v2-mode .cyl-figure {
   font-family: var(--serif-disp) !important;
   font-weight: 300 !important;
-  font-size: clamp(54px, 6vw, 96px) !important;
+  font-size: clamp(40px, 5vw, 84px) !important;
   letter-spacing: -0.03em !important;
   line-height: 1 !important;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
 }
 .v2-mode .counter {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
   display: inline-block;
+}
+.v2-mode .cyl-figure .unit {
+  font-size: 0.45em !important;
+  color: var(--rust);
+  flex: 0 0 auto;
 }
 .v2-mode .cyl-figure .unit {
   font-family: var(--serif-disp) !important;
@@ -2832,7 +2841,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   .v2-mode .hero h1 { font-size: clamp(38px, 13vw, 56px) !important; }
   .v2-mode .cyl-card { grid-template-columns: 60px 1fr !important; gap: 20px !important; padding: 24px 0 !important; }
   .v2-mode .cyl-card > div:nth-child(3) { grid-column: 2 / 3; }
-  .v2-mode .cyl-figure { font-size: clamp(40px, 11vw, 64px) !important; }
+  .v2-mode .cyl-figure { font-size: clamp(36px, 9vw, 56px) !important; }
 }
 </style>
 </head>
