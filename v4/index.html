@@ -3956,14 +3956,24 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     }
   }
 
-  /* ========== Stat counters — set final value directly (no flicker) ========== */
+  /* ========== Stat counters — count-up with snap (clean ticks, no decimal roll) ========== */
   function animateCounter(el, delay) {
     const target = parseFloat(el.dataset.target);
     const dec = parseInt(el.dataset.decimals || '0', 10);
     const prefix = el.dataset.prefix || '';
-    el.textContent = prefix + target.toFixed(dec);
-    // subtle fade-in instead of count-up
-    gsap.fromTo(el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, delay, ease: 'power2.out' });
+    const obj = { v: 0 };
+    el.textContent = prefix + (0).toFixed(dec);
+    // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
+    const snapStep = dec === 0 ? 1 : (dec === 1 ? 0.1 : 0.05);
+    gsap.fromTo(el, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.5, delay, ease: 'power2.out' });
+    gsap.to(obj, {
+      v: target,
+      duration: 1.4,
+      delay: delay + 0.15,
+      ease: 'power3.out',
+      snap: { v: snapStep },
+      onUpdate: () => { el.textContent = prefix + obj.v.toFixed(dec); }
+    });
   }
 
   /* Animate cylinders + counters when hero-right enters viewport (or on load) */
