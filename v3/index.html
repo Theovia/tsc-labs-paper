@@ -2199,7 +2199,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 /* Section scaffolding — drop borders, more breathing */
 .v2-mode section.paper {
   border-bottom: none;
-  padding: 140px 0;
+  padding: 80px 0;
 }
 .v2-mode .runhead { display: none; }
 
@@ -2225,7 +2225,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 .v2-mode .cyl-card:last-child { border-bottom: none !important; }
 
 /* Section heads — bigger, looser */
-.v2-mode .section-head { gap: 80px; padding-bottom: 60px; }
+.v2-mode .section-head { gap: 60px; padding-bottom: 36px; }
 .v2-mode .section-num {
   border-left: none;
   padding-left: 0;
@@ -2335,8 +2335,8 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 .v2-mode .hero {
   position: relative;
   overflow: hidden;
-  min-height: 100vh;
-  padding: calc(var(--topbar-h) + 80px) var(--gutter) 100px !important;
+  min-height: 70vh;
+  padding: calc(var(--topbar-h) + 60px) var(--gutter) 60px !important;
   max-width: var(--max);
   margin: 0 auto;
   border-bottom: none !important;
@@ -2684,20 +2684,65 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-style: italic;
 }
 .v2-mode .tbl-row.tsc .verdict { color: var(--rust) !important; font-weight: 500; font-style: normal; }
-.v2-mode .tbl-bar {
+.v2-mode .tbl-bar-wrap {
   grid-column: 1 / -1; grid-row: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+.v2-mode .tbl-bar {
   height: 4px;
   background: var(--ink);
-  opacity: 0.55;
-  margin-top: 14px;
+  opacity: 0.45;
   border-radius: 2px;
   width: 0;
   transform-origin: left;
+  flex: 0 0 auto;
+  min-width: 8%;
+  max-width: 70%;
+}
+.v2-mode .tbl-bar-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  color: var(--ink-faint);
+  white-space: nowrap;
 }
 .v2-mode .tbl-row.tsc .tbl-bar {
   background: var(--rust);
-  height: 6px;
+  height: 7px;
   opacity: 1;
+}
+.v2-mode .tbl-row.tsc .tbl-bar-lbl {
+  color: var(--rust);
+  font-weight: 600;
+}
+.v2-mode .tbl-callout {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.25;
+  color: var(--ink);
+  padding: 14px 18px;
+  background: color-mix(in srgb, var(--rust) 8%, transparent);
+  border-left: 3px solid var(--rust);
+  border-radius: 0 4px 4px 0;
+  margin: 0 0 18px;
+}
+.v2-mode .tbl-callout strong {
+  color: var(--rust);
+  font-weight: 500;
+  font-size: 1.15em;
+}
+.v2-mode .tbl-callout span {
+  color: var(--ink-soft);
+  font-size: 0.55em;
+  font-style: normal;
+  letter-spacing: 0;
+  display: block;
+  margin-top: 4px;
 }
 .v2-mode .tbl-row .brand {
   font-family: var(--serif-disp) !important;
@@ -2753,18 +2798,18 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 
 /* Mobile padding fix — V2 was using 140px globally */
 @media (max-width: 980px) {
-  .v2-mode section.paper { padding: 70px 0 !important; }
+  .v2-mode section.paper { padding: 56px 0 !important; }
   .v2-mode .hero {
     min-height: auto !important;
-    padding: calc(var(--topbar-h) + 40px) 24px 60px !important;
+    padding: calc(var(--topbar-h) + 30px) 24px 50px !important;
   }
   .v2-mode .section-head { gap: 32px; padding-bottom: 32px; }
   .v2-mode .section-title { font-size: clamp(32px, 6vw, 52px) !important; }
   .v2-mode .hero h1 { font-size: clamp(44px, 11vw, 88px) !important; }
 }
 @media (max-width: 600px) {
-  .v2-mode section.paper { padding: 50px 0 !important; }
-  .v2-mode .hero { padding: calc(var(--topbar-h) + 28px) 18px 44px !important; }
+  .v2-mode section.paper { padding: 40px 0 !important; }
+  .v2-mode .hero { padding: calc(var(--topbar-h) + 24px) 18px 36px !important; }
   .v2-mode .hero h1 { font-size: clamp(38px, 13vw, 56px) !important; }
   .v2-mode .cyl-card { grid-template-columns: 60px 1fr !important; gap: 20px !important; padding: 24px 0 !important; }
   .v2-mode .cyl-card > div:nth-child(3) { grid-column: 2 / 3; }
@@ -2797,7 +2842,6 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     radial-gradient(circle at 30% 50%, color-mix(in srgb, #6e8fb8 22%, transparent) 0%, transparent 55%),
     radial-gradient(circle at 70% 30%, color-mix(in srgb, #a4b8d4 16%, transparent) 0%, transparent 50%) !important;
 }
-.v3-mode .v2-toggle::after { content: ' · V3 indigo'; opacity: 0.6; }
 </style>
 
 <!-- ============ TOPBAR ============ -->
@@ -3230,13 +3274,13 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 
             <div class="calc-field">
               <label>↳ VOLUMEN DE PRODUCCIÓN <span class="val" id="volVal">1,000 unidades</span></label>
-              <input type="range" id="volume" min="100" max="10000" value="1000" step="50">
+              <input type="range" id="volume" min="100" max="10000" value="1000" step="10">
               <div class="tier-indicator" id="tierInd">— Tarifa mayoreo (+400 piezas)</div>
             </div>
 
             <div class="calc-field">
               <label>↳ PRECIO PÚBLICO SUGERIDO <span class="val" id="priceVal">$450 MXN</span></label>
-              <input type="range" id="price" min="100" max="1500" value="450" step="10">
+              <input type="range" id="price" min="100" max="1500" value="450" step="5">
               <div class="field-help">Precio final de venta al consumidor (incluye IVA)</div>
             </div>
 
@@ -4866,27 +4910,62 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   }
   calcInit();
 
-  /* ========== V2 only: animated price bars in §03 comparison ========== */
+  /* ========== V2 only: animated $/mL bars + value callouts in §03 ========== */
   function buildPriceBars() {
     if (!document.body.classList.contains('v2-mode')) return;
+
     document.querySelectorAll('.cat-block').forEach(block => {
       const rows = block.querySelectorAll('.tbl-row');
-      let maxPrice = 0;
+      let maxPerML = 0;
+      let tscPerML = null, tscPrice = null, tscBrand = '';
       const data = [];
+
       rows.forEach(row => {
+        const perEl = row.querySelector('.perml');
         const priceEl = row.querySelector('.price');
-        if (!priceEl) return;
-        const num = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
-        data.push({ row, price: num });
-        if (num > maxPrice) maxPrice = num;
+        if (!perEl || !priceEl) return;
+        const perML = parseFloat(perEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+        const price = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+        data.push({ row, perML, price });
+        if (perML > maxPerML) maxPerML = perML;
+        if (row.classList.contains('tsc')) {
+          tscPerML = perML; tscPrice = price;
+          tscBrand = row.querySelector('.brand')?.textContent || '';
+        }
       });
-      if (maxPrice === 0) return;
-      data.forEach(({ row, price }) => {
-        if (row.querySelector('.tbl-bar')) return;
+
+      if (maxPerML === 0) return;
+
+      // Insert value callout — only if TSC row found and has comparable competitors
+      if (tscPerML !== null && !block.querySelector('.tbl-callout')) {
+        const competitors = data.filter(d => !d.row.classList.contains('tsc'));
+        const moreExpensive = competitors.filter(c => c.perML > tscPerML);
+        if (moreExpensive.length) {
+          const maxComp = moreExpensive.reduce((a, b) => a.perML > b.perML ? a : b);
+          const ratio = (maxComp.perML / tscPerML).toFixed(1);
+          const callout = document.createElement('div');
+          callout.className = 'tbl-callout';
+          callout.innerHTML = `<strong>${ratio}×</strong> <span>menos $/mL que ${maxComp.row.querySelector('.brand')?.textContent || 'la competencia'} · misma calidad de fórmula</span>`;
+          const title = block.querySelector('.cat-title');
+          if (title) title.insertAdjacentElement('afterend', callout);
+        }
+      }
+
+      // Build bars based on $/mL (smaller = better value)
+      data.forEach(({ row, perML }) => {
+        const old = row.querySelector('.tbl-bar');
+        if (old) old.remove();
+        const wrap = document.createElement('div');
+        wrap.className = 'tbl-bar-wrap';
         const bar = document.createElement('div');
         bar.className = 'tbl-bar';
-        bar.dataset.target = (price / maxPrice * 100).toFixed(1);
-        row.appendChild(bar);
+        bar.dataset.target = (perML / maxPerML * 100).toFixed(1);
+        const lbl = document.createElement('span');
+        lbl.className = 'tbl-bar-lbl';
+        lbl.textContent = `$${perML} / mL`;
+        wrap.appendChild(bar);
+        wrap.appendChild(lbl);
+        row.appendChild(wrap);
       });
     });
 
