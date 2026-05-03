@@ -2440,6 +2440,13 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-size: clamp(54px, 6vw, 96px) !important;
   letter-spacing: -0.03em !important;
   line-height: 1 !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.v2-mode .counter {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  display: inline-block;
 }
 .v2-mode .cyl-figure .unit {
   font-family: var(--serif-disp) !important;
