@@ -2226,27 +2226,53 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 
 /* Section heads — bigger, looser */
 .v2-mode .section-head { gap: 80px; padding-bottom: 60px; }
-.v2-mode .section-num { border-left: 2px solid var(--rust); padding-left: 22px; }
-.v2-mode .section-num .n {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.20em;
-  color: var(--rust);
-  font-weight: 600;
+.v2-mode .section-num {
+  border-left: none;
+  padding-left: 0;
+  border-top: 2px solid var(--rust);
+  padding-top: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 18px;
+  row-gap: 2px;
+  align-items: baseline;
+  max-width: max-content;
 }
-.v2-mode .section-num .lbl {
+.v2-mode .section-num .n {
   font-family: var(--serif-disp);
   font-style: italic;
-  font-weight: 400;
-  font-size: 22px;
+  font-weight: 300;
+  font-size: 38px;
+  color: var(--rust);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+.v2-mode .section-num .lbl {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   color: var(--ink);
-  margin-top: 6px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
 }
 .v2-mode .section-num .sub {
-  font-family: var(--serif-body);
-  font-size: 13px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--ink-faint);
-  margin-top: 4px;
+  margin: 0;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .v2-mode .section-num .n { font-size: 32px; }
+  .v2-mode .section-num .lbl { font-size: 9.5px; }
+  .v2-mode .section-num .sub { font-size: 8.5px; }
 }
 .v2-mode .section-title {
   font-family: var(--serif-disp);
