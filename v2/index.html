@@ -2608,6 +2608,26 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 
 /* Smooth scroll fluidity */
 .v2-mode * { transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Mobile padding fix — V2 was using 140px globally */
+@media (max-width: 980px) {
+  .v2-mode section.paper { padding: 70px 0 !important; }
+  .v2-mode .hero {
+    min-height: auto !important;
+    padding: calc(var(--topbar-h) + 40px) 24px 60px !important;
+  }
+  .v2-mode .section-head { gap: 32px; padding-bottom: 32px; }
+  .v2-mode .section-title { font-size: clamp(32px, 6vw, 52px) !important; }
+  .v2-mode .hero h1 { font-size: clamp(44px, 11vw, 88px) !important; }
+}
+@media (max-width: 600px) {
+  .v2-mode section.paper { padding: 50px 0 !important; }
+  .v2-mode .hero { padding: calc(var(--topbar-h) + 28px) 18px 44px !important; }
+  .v2-mode .hero h1 { font-size: clamp(38px, 13vw, 56px) !important; }
+  .v2-mode .cyl-card { grid-template-columns: 60px 1fr !important; gap: 20px !important; padding: 24px 0 !important; }
+  .v2-mode .cyl-card > div:nth-child(3) { grid-column: 2 / 3; }
+  .v2-mode .cyl-figure { font-size: clamp(40px, 11vw, 64px) !important; }
+}
 </style>
 </head>
 
@@ -4568,6 +4588,117 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   }
 
   /* ========== ScrollTrigger refresh on resize is automatic; nothing to bind ========== */
+
+  /* ========== CALCULADORA — populate productSel + bind sliders + compute ========== */
+  const PRODUCT_PRICING = [
+    { id: 'esp-grasa',   name: 'Espuma Dermolimpiadora · grasa · 150 mL',  cost100: 55,  cost400: 47,  group: 'Espuma 150 mL' },
+    { id: 'esp-normal',  name: 'Espuma Dermolimpiadora · normal · 150 mL', cost100: 55,  cost400: 47,  group: 'Espuma 150 mL' },
+    { id: 'esp-seca',    name: 'Espuma Dermolimpiadora · seca · 150 mL',   cost100: 61,  cost400: 51,  group: 'Espuma 150 mL' },
+    { id: 'ton-grasa',   name: 'Tónico · piel grasa · 150 mL',             cost100: 64,  cost400: 54,  group: 'Tónico 150 mL' },
+    { id: 'ton-normal',  name: 'Tónico · piel normal · 150 mL',            cost100: 80,  cost400: 68,  group: 'Tónico 150 mL' },
+    { id: 'ton-seca',    name: 'Tónico · piel seca · 150 mL',              cost100: 90,  cost400: 77,  group: 'Tónico 150 mL' },
+    { id: 'suero-hidr',  name: 'Suero Ultra Hidratante · 30 mL',           cost100: 92,  cost400: 79,  group: 'Sueros' },
+    { id: 'suero-vitc',  name: 'Suero Vitamina C · 30 mL',                 cost100: 71,  cost400: 60,  group: 'Sueros' },
+    { id: 'cg-grasa',    name: 'Crema Gel Facial · grasa · 60 mL',         cost100: 57,  cost400: 49,  group: 'Crema Gel 60 mL' },
+    { id: 'cg-seca',     name: 'Crema Gel Facial · seca · 60 mL',          cost100: 53,  cost400: 45,  group: 'Crema Gel 60 mL' },
+    { id: 'cg-normal',   name: 'Crema Gel Facial · normal · 60 mL',        cost100: 52,  cost400: 44,  group: 'Crema Gel 60 mL' },
+    { id: 'cg-rep',      name: 'Crema Gel Reparadora · 60 mL',             cost100: 101, cost400: 86,  group: 'Crema Gel 60 mL' },
+    { id: 'cg-noche',    name: 'Crema Gel Noche · 60 mL',                  cost100: 127, cost400: 108, group: 'Crema Gel 60 mL' },
+    { id: 'masc',        name: 'Mascarilla de Arcilla · 60 mL',            cost100: 37,  cost400: 32,  group: 'Mascarillas' },
+    { id: 'corp',        name: 'Crema Corporal · 250 mL',                  cost100: 122, cost400: 104, group: 'Corporal' },
+    { id: 'desmaq',      name: 'Desmaquillante Bifásico · 100 mL',         cost100: 78,  cost400: 66,  group: 'Limpieza' },
+    { id: 'jabon',       name: 'Jabón Facial Líquido · grasa · 120 mL',    cost100: 55,  cost400: 47,  group: 'Limpieza' },
+    { id: 'cont-cg',     name: 'Contorno Ojos · crema gel · 15 mL',        cost100: 37,  cost400: 32,  group: 'Contorno' },
+    { id: 'cont-suero',  name: 'Contorno Ojos · suero · 15 mL',            cost100: 53,  cost400: 45,  group: 'Contorno' },
+    { id: 'balsamo',     name: 'Bálsamo Crecimiento de Barba · 30 mL',     cost100: 52,  cost400: 44,  group: 'Línea masculina' }
+  ];
+
+  function calcInit() {
+    const sel = document.getElementById('productSel');
+    if (!sel) return;
+    const vol = document.getElementById('volume');
+    const price = document.getElementById('price');
+    const pkg = document.getElementById('pkg');
+    const channelGroup = document.getElementById('channelGroup');
+    if (!vol || !price || !pkg || !channelGroup) return;
+
+    const byGroup = {};
+    PRODUCT_PRICING.forEach(p => { (byGroup[p.group] = byGroup[p.group] || []).push(p); });
+    let html = '';
+    Object.entries(byGroup).forEach(([g, items]) => {
+      html += `<optgroup label="${g}">`;
+      items.forEach(p => { html += `<option value="${p.id}">${p.name}</option>`; });
+      html += '</optgroup>';
+    });
+    sel.innerHTML = html;
+
+    let channelDiscount = 0, channelLabel = 'D2C';
+    channelGroup.addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      channelGroup.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      channelDiscount = parseFloat(chip.dataset.discount) || 0;
+      channelLabel = chip.dataset.label || 'D2C';
+      update();
+    });
+
+    function fmtMXN(n) { return `$${Math.round(n).toLocaleString('en-US')}`; }
+
+    function update() {
+      const product = PRODUCT_PRICING.find(p => p.id === sel.value) || PRODUCT_PRICING[0];
+      const v = parseInt(vol.value, 10);
+      const p = parseInt(price.value, 10);
+      const pk = parseInt(pkg.value, 10);
+
+      const tier = v >= 400 ? 'mayoreo' : 'menudeo';
+      const unitCost = tier === 'mayoreo' ? product.cost400 : product.cost100;
+
+      const tscPay = unitCost * v;
+      const envasePay = pk * v;
+      const totalInvest = tscPay + envasePay;
+
+      const grossRevenue = p * v * (1 - channelDiscount);
+      const netRevenue = grossRevenue / 1.16;
+      const ivaDeducted = grossRevenue - netRevenue;
+      const profit = netRevenue - totalInvest;
+      const margin = netRevenue > 0 ? (profit / netRevenue) * 100 : 0;
+
+      document.getElementById('volVal').textContent = `${v.toLocaleString('en-US')} unidades`;
+      document.getElementById('priceVal').textContent = `$${p} MXN`;
+      document.getElementById('tierInd').textContent = tier === 'mayoreo'
+        ? '— Tarifa mayoreo (+400 piezas)'
+        : '— Tarifa menudeo (100–399 piezas)';
+      document.getElementById('pkgVal').textContent = pk === 0 ? 'sin envase custom' : `+$${pk} MXN / unidad`;
+
+      document.getElementById('outProduct').textContent = product.name;
+      document.getElementById('outTSC').textContent = fmtMXN(tscPay);
+      document.getElementById('outTierNote').textContent = `· $${unitCost}/u (${tier})`;
+
+      const envaseLine = document.getElementById('envaseLine');
+      if (pk > 0) {
+        envaseLine.style.display = '';
+        document.getElementById('outEnvase').textContent = fmtMXN(envasePay);
+        document.getElementById('outPkgNote').textContent = `· $${pk}/u`;
+      } else {
+        envaseLine.style.display = 'none';
+      }
+
+      document.getElementById('outInvest').textContent = fmtMXN(totalInvest);
+      document.getElementById('outRevenue').textContent = fmtMXN(grossRevenue);
+      document.getElementById('outCanalTag').textContent = `(${channelLabel})`;
+      document.getElementById('outIva').textContent = fmtMXN(ivaDeducted);
+      document.getElementById('outProfit').textContent = fmtMXN(profit);
+      document.getElementById('outMargin').textContent = `${margin.toFixed(1)}%`;
+    }
+
+    sel.addEventListener('change', update);
+    vol.addEventListener('input', update);
+    price.addEventListener('input', update);
+    pkg.addEventListener('input', update);
+    update();
+  }
+  calcInit();
 
 })();
 </script>
