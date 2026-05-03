@@ -2812,6 +2812,159 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   margin-bottom: 12px !important;
 }
 .v2-mode .cat-title::before { content: none; }
+
+/* §03 VS layout — TSC dominant card + competitor mini cards */
+.v2-mode .vs-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 36px;
+  margin-top: 16px;
+  align-items: start;
+}
+.v2-mode .vs-tsc {
+  background: color-mix(in srgb, var(--rust) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--rust) 35%, transparent);
+  border-radius: 12px;
+  padding: 30px 30px 32px;
+  position: relative;
+}
+.v2-mode .vs-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.v2-mode .vs-name {
+  font-family: var(--serif-disp);
+  font-weight: 400;
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--rust);
+  margin: 0 0 8px;
+}
+.v2-mode .vs-desc {
+  font-family: var(--serif-body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+.v2-mode .vs-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--rust) 25%, transparent);
+  padding-top: 16px;
+}
+.v2-mode .vs-price {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: clamp(34px, 4vw, 50px);
+  color: var(--rust);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.v2-mode .vs-perml {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+.v2-mode .vs-claim {
+  font-family: var(--serif-disp);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink);
+  padding-top: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--rust) 18%, transparent);
+}
+.v2-mode .vs-competitors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.v2-mode .vs-mini {
+  background: var(--paper-deep);
+  border-radius: 8px;
+  padding: 14px 16px 16px;
+  border-left: 2px solid transparent;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.v2-mode .vs-mini:hover { transform: translateX(3px); }
+.v2-mode .vs-mini.warn {
+  border-left-color: #b94a3f;
+}
+.v2-mode .vs-mini-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.v2-mode .vs-mini-brand {
+  font-family: var(--serif-disp);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.v2-mode .vs-mini-flag {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-faint);
+  flex: 0 0 auto;
+}
+.v2-mode .vs-mini.warn .vs-mini-flag {
+  color: #b94a3f;
+  font-weight: 700;
+}
+.v2-mode .vs-mini-desc {
+  font-family: var(--serif-body);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.v2-mode .vs-mini-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.v2-mode .vs-mini-price {
+  font-family: var(--serif-disp);
+  font-weight: 300;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+.v2-mode .vs-mini-perml {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+.v2-mode .vs-mini-verdict {
+  font-family: var(--serif-body);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  margin-top: 4px;
+}
+.v2-mode .vs-mini.warn .vs-mini-verdict { color: #8a3a32; }
+@media (max-width: 720px) {
+  .v2-mode .vs-grid { grid-template-columns: 1fr; gap: 18px; }
+  .v2-mode .vs-tsc { padding: 22px 20px 24px; }
+}
 .v2-mode .cat-block {
   border-bottom: none !important;
   padding-bottom: 36px !important;
@@ -5043,82 +5196,80 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   }
   calcInit();
 
-  /* ========== V2 only: animated $/mL bars + value callouts in §03 ========== */
-  function buildPriceBars() {
+  /* ========== V2 only: VS layout (TSC dominant + mini competitors) in §03 ========== */
+  function buildVsLayout() {
     if (!document.body.classList.contains('v2-mode')) return;
 
+    const WARN_RX = /fenoxietanol|parabeno|sulfato|clorfen|fragancia\s+sint|silicon|ftalat|tóxic|no\s+publican|no\s+publica/i;
+
     document.querySelectorAll('.cat-block').forEach(block => {
-      const rows = block.querySelectorAll('.tbl-row');
-      let maxPerML = 0;
-      let tscPerML = null, tscPrice = null, tscBrand = '';
-      const data = [];
+      if (block.querySelector('.vs-grid')) return;
+      const rows = Array.from(block.querySelectorAll('.tbl-row'));
+      if (!rows.length) return;
+      const tscRow = rows.find(r => r.classList.contains('tsc'));
+      const competitors = rows.filter(r => !r.classList.contains('tsc'));
+      if (!tscRow) return;
 
-      rows.forEach(row => {
-        const perEl = row.querySelector('.perml');
-        const priceEl = row.querySelector('.price');
-        if (!perEl || !priceEl) return;
-        const perML = parseFloat(perEl.textContent.replace(/[^0-9.]/g, '')) || 0;
-        const price = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
-        data.push({ row, perML, price });
-        if (perML > maxPerML) maxPerML = perML;
-        if (row.classList.contains('tsc')) {
-          tscPerML = perML; tscPrice = price;
-          tscBrand = row.querySelector('.brand')?.textContent || '';
-        }
-      });
+      const txt = (el, sel) => el.querySelector(sel)?.textContent.trim() || '';
 
-      if (maxPerML === 0) return;
+      const grid = document.createElement('div');
+      grid.className = 'vs-grid';
+      grid.innerHTML = `
+        <div class="vs-tsc">
+          <div class="vs-badge">★ TSC LABS · The Skin Club</div>
+          <h4 class="vs-name">${txt(tscRow, '.brand').replace(/^The Skin Club\s*·\s*/, '')}</h4>
+          <p class="vs-desc">${txt(tscRow, '.desc')}</p>
+          <div class="vs-prices">
+            <span class="vs-price">${txt(tscRow, '.price')}</span>
+            <span class="vs-perml">${txt(tscRow, '.perml')}</span>
+          </div>
+          <div class="vs-claim">${txt(tscRow, '.verdict')}</div>
+        </div>
+        <div class="vs-competitors">
+          ${competitors.map(r => {
+            const verdict = txt(r, '.verdict');
+            const isWarn = WARN_RX.test(verdict);
+            return `
+              <div class="vs-mini${isWarn ? ' warn' : ''}">
+                <div class="vs-mini-head">
+                  <span class="vs-mini-brand">${txt(r, '.brand')}</span>
+                  <span class="vs-mini-flag">${isWarn ? '⚠' : '·'}</span>
+                </div>
+                <div class="vs-mini-desc">${txt(r, '.desc')}</div>
+                <div class="vs-mini-prices">
+                  <span class="vs-mini-price">${txt(r, '.price')}</span>
+                  <span class="vs-mini-perml">${txt(r, '.perml')}</span>
+                </div>
+                <div class="vs-mini-verdict">${verdict}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
 
-      // Insert value callout — only if TSC row found and has comparable competitors
-      if (tscPerML !== null && !block.querySelector('.tbl-callout')) {
-        const competitors = data.filter(d => !d.row.classList.contains('tsc'));
-        const moreExpensive = competitors.filter(c => c.perML > tscPerML);
-        if (moreExpensive.length) {
-          const maxComp = moreExpensive.reduce((a, b) => a.perML > b.perML ? a : b);
-          const ratio = (maxComp.perML / tscPerML).toFixed(1);
-          const callout = document.createElement('div');
-          callout.className = 'tbl-callout';
-          callout.innerHTML = `<strong>${ratio}×</strong> <span>menos $/mL que ${maxComp.row.querySelector('.brand')?.textContent || 'la competencia'} · misma calidad de fórmula</span>`;
-          const title = block.querySelector('.cat-title');
-          if (title) title.insertAdjacentElement('afterend', callout);
-        }
-      }
-
-      // Build bars based on $/mL (smaller = better value)
-      data.forEach(({ row, perML }) => {
-        const old = row.querySelector('.tbl-bar');
-        if (old) old.remove();
-        const wrap = document.createElement('div');
-        wrap.className = 'tbl-bar-wrap';
-        const bar = document.createElement('div');
-        bar.className = 'tbl-bar';
-        bar.dataset.target = (perML / maxPerML * 100).toFixed(1);
-        const lbl = document.createElement('span');
-        lbl.className = 'tbl-bar-lbl';
-        lbl.textContent = `$${perML} / mL`;
-        wrap.appendChild(bar);
-        wrap.appendChild(lbl);
-        row.appendChild(wrap);
-      });
+      // Hide original rows, append new layout
+      rows.forEach(r => { r.style.display = 'none'; });
+      block.appendChild(grid);
     });
 
     if (!window.gsap || !window.ScrollTrigger) return;
     document.querySelectorAll('.cat-block').forEach(block => {
-      const bars = block.querySelectorAll('.tbl-bar');
-      if (!bars.length) return;
-      gsap.fromTo(bars,
-        { width: 0 },
-        {
-          width: (i, el) => el.dataset.target + '%',
-          duration: 1.1,
-          ease: 'power3.out',
-          stagger: 0.10,
-          scrollTrigger: { trigger: block, start: 'top 78%', once: true }
-        }
+      const tsc = block.querySelector('.vs-tsc');
+      const minis = block.querySelectorAll('.vs-mini');
+      if (!tsc) return;
+      gsap.fromTo(tsc,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+          scrollTrigger: { trigger: block, start: 'top 80%', once: true }}
+      );
+      gsap.fromTo(minis,
+        { opacity: 0, x: 20 },
+        { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out', stagger: 0.10,
+          scrollTrigger: { trigger: block, start: 'top 80%', once: true }, delay: 0.15 }
       );
     });
   }
-  buildPriceBars();
+  buildVsLayout();
 
 })();
 </script>
