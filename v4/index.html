@@ -2443,19 +2443,25 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
   white-space: nowrap;
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
+  display: block;
+  margin-bottom: 14px;
 }
 .v2-mode .counter {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
   display: inline-block;
+  vertical-align: baseline;
 }
 .v2-mode .cyl-figure .unit {
+  font-family: var(--serif-disp) !important;
   font-size: 0.45em !important;
   color: var(--rust);
-  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: baseline;
+  margin-left: 4px;
+}
+.v2-mode .cyl-label, .v2-mode .cyl-source {
+  transform: none !important;
 }
 .v2-mode .cyl-figure .unit {
   font-family: var(--serif-disp) !important;
@@ -2805,7 +2811,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   padding-top: 14px !important;
   margin-bottom: 12px !important;
 }
-.v2-mode .cat-title::before { content: '§ '; }
+.v2-mode .cat-title::before { content: none; }
 .v2-mode .cat-block {
   border-bottom: none !important;
   padding-bottom: 36px !important;
@@ -3981,7 +3987,8 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     el.textContent = prefix + (0).toFixed(dec);
     // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
     const snapStep = dec === 0 ? 1 : (dec === 1 ? 0.1 : 0.05);
-    gsap.fromTo(el, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.5, delay, ease: 'power2.out' });
+    // Subtle opacity fade-in only — no Y translate (caused perceived layout shift)
+    gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.4, delay, ease: 'power2.out' });
     gsap.to(obj, {
       v: target,
       duration: 1.4,
