@@ -2336,10 +2336,18 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   position: relative;
   overflow: hidden;
   min-height: 70vh;
-  padding: calc(var(--topbar-h) + 60px) var(--gutter) 60px !important;
+  padding: calc(var(--topbar-h) + 60px) 0 60px !important;
+  max-width: none !important;
+  width: 100%;
+  margin: 0 !important;
+  border-bottom: none !important;
+}
+.v2-mode .hero .hero-grid {
   max-width: var(--max);
   margin: 0 auto;
-  border-bottom: none !important;
+  padding: 0 var(--gutter);
+  position: relative;
+  z-index: 1;
 }
 .v2-mode .hero::before {
   content: '';
@@ -3912,22 +3920,14 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     }
   }
 
-  /* ========== Stat counters — count from 0 to target ========== */
+  /* ========== Stat counters — set final value directly (no flicker) ========== */
   function animateCounter(el, delay) {
     const target = parseFloat(el.dataset.target);
     const dec = parseInt(el.dataset.decimals || '0', 10);
     const prefix = el.dataset.prefix || '';
-    const obj = { v: 0 };
-    el.textContent = prefix + (0).toFixed(dec);
-    gsap.to(obj, {
-      v: target,
-      duration: 1.6,
-      delay: delay,
-      ease: 'power2.out',
-      onUpdate: () => {
-        el.textContent = prefix + obj.v.toFixed(dec);
-      }
-    });
+    el.textContent = prefix + target.toFixed(dec);
+    // subtle fade-in instead of count-up
+    gsap.fromTo(el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, delay, ease: 'power2.out' });
   }
 
   /* Animate cylinders + counters when hero-right enters viewport (or on load) */
