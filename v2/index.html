@@ -2395,9 +2395,13 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-family: var(--serif-disp) !important;
   font-weight: 300 !important;
   letter-spacing: -0.045em !important;
-  font-size: clamp(56px, 9vw, 140px) !important;
-  line-height: 0.95 !important;
+  font-size: clamp(48px, 7.4vw, 108px) !important;
+  line-height: 0.98 !important;
 }
+.v2-mode .hero-annot { display: none !important; }
+.v2-mode .hero-grid::before { display: none !important; }
+.v2-mode .hero-grid { gap: 64px !important; }
+.v2-mode .hero-left { padding-right: 0 !important; }
 .v2-mode .hero h1 em {
   font-style: italic !important;
   color: var(--rust) !important;
@@ -2882,7 +2886,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       </p>
 
       <div class="hero-meta-row">
-        <div><span class="key">RECEP.</span> <span class="val">N. CENTELLA</span></div>
+        <div><span class="key">DESTINATARIO</span> <span class="val">DIRECCIÓN COMERCIAL</span></div>
         <div class="center"><span class="key">EMITIDO</span> <span class="val">ZAPOPAN, MX</span></div>
         <div><span class="key">FOLIO</span> <span class="val">TSC—01</span></div>
       </div>

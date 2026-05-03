@@ -2395,9 +2395,13 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   font-family: var(--serif-disp) !important;
   font-weight: 300 !important;
   letter-spacing: -0.045em !important;
-  font-size: clamp(56px, 9vw, 140px) !important;
-  line-height: 0.95 !important;
+  font-size: clamp(48px, 7.4vw, 108px) !important;
+  line-height: 0.98 !important;
 }
+.v2-mode .hero-annot { display: none !important; }
+.v2-mode .hero-grid::before { display: none !important; }
+.v2-mode .hero-grid { gap: 64px !important; }
+.v2-mode .hero-left { padding-right: 0 !important; }
 .v2-mode .hero h1 em {
   font-style: italic !important;
   color: var(--rust) !important;
@@ -2844,6 +2848,13 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 }
 </style>
 
+<div style="position:fixed;bottom:22px;right:22px;z-index:9998;display:flex;gap:6px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;">
+  <a href="/" style="background:#8b3a1f;color:#fff;padding:8px 12px;text-decoration:none;border-radius:999px;">V1</a>
+  <span style="background:#0c0c0d;color:#fff;padding:8px 12px;border-radius:999px;">V2 SLATE</span>
+  <a href="/v3/" style="background:#4f3fbd;color:#fff;padding:8px 12px;text-decoration:none;border-radius:999px;">V3</a>
+  <a href="/v4/" style="background:#d4537a;color:#fff;padding:8px 12px;text-decoration:none;border-radius:999px;">V4</a>
+</div>
+
 <!-- ============ TOPBAR ============ -->
 <header class="topbar">
   <div class="topbar-inner">
@@ -2900,7 +2911,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       </p>
 
       <div class="hero-meta-row">
-        <div><span class="key">RECEP.</span> <span class="val">N. CENTELLA</span></div>
+        <div><span class="key">DESTINATARIO</span> <span class="val">DIRECCIÓN COMERCIAL</span></div>
         <div class="center"><span class="key">EMITIDO</span> <span class="val">ZAPOPAN, MX</span></div>
         <div><span class="key">FOLIO</span> <span class="val">TSC—01</span></div>
       </div>
