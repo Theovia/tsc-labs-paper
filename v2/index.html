@@ -2812,6 +2812,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 .v2-mode .cat-title::before { content: none; }
 
 /* §03 VS layout — TSC dominant card + competitor mini cards */
+.v2-mode .tbl-row.vs-hidden { display: none !important; }
 .v2-mode .vs-grid {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
@@ -5212,8 +5213,8 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
         </div>
       `;
 
-      // Hide original rows, append new layout
-      rows.forEach(r => { r.style.display = 'none'; });
+      // Hide original rows (CSS has !important display:grid, force override via class)
+      rows.forEach(r => { r.classList.add('vs-hidden'); });
       block.appendChild(grid);
     });
 
