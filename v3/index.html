@@ -4292,12 +4292,20 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       el.style.whiteSpace = 'pre';
       const prev = el.textContent;
       let maxW = 0;
-      ['8', '0', '6', '4'].forEach(d => {
-        el.textContent = candidate(d);
+      // Test every digit 0-9 — in Fraunces (and many serifs) "0" can be wider
+      // than "8", and you need to actually try them to find the true upper bound.
+      for (let d = 0; d < 10; d++) {
+        el.textContent = candidate(String(d));
         const w = el.getBoundingClientRect().width;
         if (w > maxW) maxW = w;
-      });
-      el.style.width = maxW + 'px';
+      }
+      // Also measure the rendered target itself (mixed-digit kerning can win).
+      el.textContent = fmt(target);
+      const tw = el.getBoundingClientRect().width;
+      if (tw > maxW) maxW = tw;
+      // Subpixel buffer — one-pixel rounding errors must never push the unit
+      // pill into the digits.
+      el.style.width = (maxW + 4) + 'px';
       el.textContent = prev;
     };
     const startAnim = () => {
