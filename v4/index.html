@@ -2906,7 +2906,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   grid-template-columns: 1.25fr 1fr;
   gap: 36px;
   margin-top: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 .v2-mode .vs-tsc {
   background: color-mix(in srgb, var(--rust) 7%, var(--paper));
@@ -2914,6 +2914,9 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   border-radius: 12px;
   padding: 30px 30px 32px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .v2-mode .vs-badge {
   font-family: var(--mono);
