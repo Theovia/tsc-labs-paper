@@ -4099,8 +4099,15 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     const target = parseFloat(el.dataset.target);
     const dec = parseInt(el.dataset.decimals || '0', 10);
     const prefix = el.dataset.prefix || '';
+    // Zero-pad integer to target's digit count so total char width is constant
+    // ($0.0 grows to $11.3; pad start to $00.0 → unit pill stays anchored)
+    const intDigits = Math.max(1, Math.floor(Math.abs(target)).toString().length);
+    const pad = (n) => {
+      const [i, d] = n.toFixed(dec).split('.');
+      return prefix + i.padStart(intDigits, '0') + (d != null ? '.' + d : '');
+    };
     const obj = { v: 0 };
-    el.textContent = prefix + (0).toFixed(dec);
+    el.textContent = pad(0);
     // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
     const snapStep = dec === 0 ? 1 : (dec === 1 ? 0.1 : 0.05);
     // Subtle opacity fade-in only — no Y translate (caused perceived layout shift)
@@ -4111,7 +4118,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       delay: delay + 0.15,
       ease: 'power3.out',
       snap: { v: snapStep },
-      onUpdate: () => { el.textContent = prefix + obj.v.toFixed(dec); }
+      onUpdate: () => { el.textContent = pad(obj.v); }
     });
   }
 
