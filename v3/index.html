@@ -4131,6 +4131,15 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       const [i, d] = n.toFixed(dec).split('.');
       return prefix + i.padStart(intDigits, '0') + (d != null ? '.' + d : '');
     };
+    // Measure the rendered width of the target string and lock it as min-width.
+    // Fraunces (display serif) doesn't reliably honor `font-feature-settings: tnum`,
+    // so proportional digits would still wobble the box width frame by frame and
+    // push the unit pill (B / % / ×). Locking width here is font-independent.
+    el.style.display = 'inline-block';
+    el.style.textAlign = 'right';
+    el.style.whiteSpace = 'pre';
+    el.textContent = pad(target);
+    el.style.minWidth = el.getBoundingClientRect().width + 'px';
     const obj = { v: 0 };
     el.textContent = pad(0);
     // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
