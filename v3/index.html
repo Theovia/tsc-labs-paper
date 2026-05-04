@@ -4124,24 +4124,33 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     const target = parseFloat(el.dataset.target);
     const dec = parseInt(el.dataset.decimals || '0', 10);
     const prefix = el.dataset.prefix || '';
-    // Zero-pad integer to target's digit count so total char width is constant
-    // ($0.0 grows to $11.3; pad start to $00.0 → unit pill stays anchored)
+    // Plain (visible) format — no padding, so $0.0 → $11.3 looks natural.
+    const fmt = (n) => prefix + n.toFixed(dec);
+    // Padded format used only to measure max width (so unit pill stays anchored).
     const intDigits = Math.max(1, Math.floor(Math.abs(target)).toString().length);
-    const pad = (n) => {
-      const [i, d] = n.toFixed(dec).split('.');
+    const padded = () => {
+      const [i, d] = target.toFixed(dec).split('.');
       return prefix + i.padStart(intDigits, '0') + (d != null ? '.' + d : '');
     };
-    // Measure the rendered width of the target string and lock it as min-width.
-    // Fraunces (display serif) doesn't reliably honor `font-feature-settings: tnum`,
-    // so proportional digits would still wobble the box width frame by frame and
-    // push the unit pill (B / % / ×). Locking width here is font-independent.
-    el.style.display = 'inline-block';
-    el.style.textAlign = 'right';
-    el.style.whiteSpace = 'pre';
-    el.textContent = pad(target);
-    el.style.minWidth = el.getBoundingClientRect().width + 'px';
+    // Right-align inside a box wide enough for the final string. Internal digits
+    // can wobble (Fraunces ignores tnum) but the right edge — and therefore the
+    // unit pill (B / % / ×) — stays anchored.
+    const lockWidth = () => {
+      el.style.display = 'inline-block';
+      el.style.textAlign = 'right';
+      el.style.whiteSpace = 'pre';
+      const prev = el.textContent;
+      el.textContent = padded();
+      el.style.minWidth = el.getBoundingClientRect().width + 'px';
+      el.textContent = prev;
+    };
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(lockWidth);
+    } else {
+      lockWidth();
+    }
     const obj = { v: 0 };
-    el.textContent = pad(0);
+    el.textContent = fmt(0);
     // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
     const snapStep = dec === 0 ? 1 : (dec === 1 ? 0.1 : 0.05);
     // Subtle opacity fade-in only — no Y translate (caused perceived layout shift)
@@ -4152,7 +4161,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       delay: delay + 0.15,
       ease: 'power3.out',
       snap: { v: snapStep },
-      onUpdate: () => { el.textContent = pad(obj.v); }
+      onUpdate: () => { el.textContent = fmt(obj.v); }
     });
   }
 
