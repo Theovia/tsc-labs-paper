@@ -2482,6 +2482,60 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
   letter-spacing: 0.18em;
 }
 
+/* ===== Stat ledger — col 3 (2fr): scale bar + tick axis + percent readout ===== */
+.v2-mode .cyl-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 8px;
+  font-family: var(--mono);
+}
+.v2-mode .extra-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+.v2-mode .extra-tag { color: var(--ink-faint); }
+.v2-mode .extra-pct {
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+.v2-mode .extra-pct .pct-num { font-variant-numeric: tabular-nums; }
+.v2-mode .bar-track {
+  position: relative;
+  height: 8px;
+  background: transparent;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.v2-mode .bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  background: var(--bar-color, var(--rust));
+  opacity: 0.55;
+}
+.v2-mode .bar-tick {
+  position: absolute;
+  left: var(--p); top: -3px; bottom: -3px;
+  width: 1px;
+  background: var(--ink);
+  opacity: 0.5;
+}
+.v2-mode .bar-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+}
+
 /* Body paragraph fluidity */
 .v2-mode .opening,
 .v2-mode .opening p,
@@ -3147,6 +3201,19 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
             <div class="cyl-source">FUENTE / MORDOR INTELLIGENCE</div>
           </div>
         </div>
+        <div class="cyl-extra" data-fill="0.78" style="--bar-color:#3a7da8;">
+          <div class="extra-head">
+            <span class="extra-tag">Escala · Mercado MX / LatAm</span>
+            <span class="extra-pct"><span class="pct-num">0</span>%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill"></div>
+            <div class="bar-tick" style="--p:25%"></div>
+            <div class="bar-tick" style="--p:50%"></div>
+            <div class="bar-tick" style="--p:75%"></div>
+          </div>
+          <div class="bar-axis"><span>0</span><span>50</span><span>100</span></div>
+        </div>
       </div>
 
       <!-- STAT 2 -->
@@ -3176,6 +3243,19 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
             <div class="cyl-source">FUENTE / MORDOR INTELLIGENCE</div>
           </div>
         </div>
+        <div class="cyl-extra" data-fill="0.62" style="--bar-color:#5a8a6b;">
+          <div class="extra-head">
+            <span class="extra-tag">Confianza proyección · 2024–2029</span>
+            <span class="extra-pct"><span class="pct-num">0</span>%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill"></div>
+            <div class="bar-tick" style="--p:25%"></div>
+            <div class="bar-tick" style="--p:50%"></div>
+            <div class="bar-tick" style="--p:75%"></div>
+          </div>
+          <div class="bar-axis"><span>0</span><span>50</span><span>100</span></div>
+        </div>
       </div>
 
       <!-- STAT 3 -->
@@ -3204,6 +3284,19 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
             <div class="cyl-label">Ingenieros en Biotecnología del ITESM detrás de cada fórmula</div>
             <div class="cyl-source">FUENTE / TSC LABS R&amp;D</div>
           </div>
+        </div>
+        <div class="cyl-extra" data-fill="0.34" style="--bar-color:#c8782e;">
+          <div class="extra-head">
+            <span class="extra-tag">Densidad técnica · equipo R&amp;D</span>
+            <span class="extra-pct"><span class="pct-num">0</span>%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill"></div>
+            <div class="bar-tick" style="--p:25%"></div>
+            <div class="bar-tick" style="--p:50%"></div>
+            <div class="bar-tick" style="--p:75%"></div>
+          </div>
+          <div class="bar-axis"><span>0</span><span>50</span><span>100</span></div>
         </div>
       </div>
 
@@ -4190,7 +4283,33 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     }
   }
 
-  /* Animate cylinders + counters when hero-right enters viewport (or on load) */
+  /* Animate the col-3 scale bar in sync with the cylinder liquid */
+  function animateExtra(extra, delay) {
+    const fill = parseFloat(extra.dataset.fill || '0');
+    const bar = extra.querySelector('.bar-fill');
+    const pct = extra.querySelector('.pct-num');
+    if (bar) {
+      gsap.fromTo(bar, { width: '0%' }, {
+        width: (fill * 100) + '%',
+        duration: 1.4,
+        delay,
+        ease: 'power2.out'
+      });
+    }
+    if (pct) {
+      const obj = { v: 0 };
+      gsap.to(obj, {
+        v: fill * 100,
+        duration: 1.4,
+        delay,
+        ease: 'power2.out',
+        snap: { v: 1 },
+        onUpdate: () => { pct.textContent = Math.round(obj.v); }
+      });
+    }
+  }
+
+  /* Animate cylinders + counters + scale bars when hero-right enters viewport (or on load) */
   const heroRight = document.querySelector('.hero-right');
   if (heroRight && window.ScrollTrigger) {
     ScrollTrigger.create({
@@ -4200,6 +4319,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       onEnter: () => {
         document.querySelectorAll('.cyl-svg').forEach((svg, i) => animateCylinder(svg, 0.15 + i * 0.12));
         document.querySelectorAll('.counter').forEach((el, i) => animateCounter(el, 0.25 + i * 0.12));
+        document.querySelectorAll('.cyl-extra').forEach((ex, i) => animateExtra(ex, 0.35 + i * 0.12));
       }
     });
   } else {
@@ -4207,6 +4327,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     setTimeout(() => {
       document.querySelectorAll('.cyl-svg').forEach((svg, i) => animateCylinder(svg, i * 0.12));
       document.querySelectorAll('.counter').forEach((el, i) => animateCounter(el, i * 0.12));
+      document.querySelectorAll('.cyl-extra').forEach((ex, i) => animateExtra(ex, 0.1 + i * 0.12));
     }, 400);
   }
 
