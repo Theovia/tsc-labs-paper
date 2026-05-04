@@ -4221,7 +4221,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     }
   } catch (e) { /* noop */ }
 
-  /* ========== Cylinder fill — pour, settle, ripple ========== */
+  /* ========== Cylinder fill — smooth rise, gentle meniscus ripple ========== */
   function animateCylinder(svg, delay) {
     const fill = parseFloat(svg.dataset.fill || '0.5');
     const liquid = svg.querySelector('.cyl-liquid');
@@ -4229,42 +4229,30 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     const top = 12, bot = 116, range = bot - top;
     const h = range * fill;
     const targetY = bot - h;
-    const overshootY = targetY - 4;
-    const overshootH = h + 4;
     if (liquid) {
       gsap.set(liquid, { attr: { y: bot, height: 0 } });
-      const tl = gsap.timeline({ delay });
-      tl.to(liquid, {
-        attr: { y: overshootY, height: overshootH },
-        duration: 1.1,
-        ease: 'power3.out'
-      })
-      .to(liquid, {
+      gsap.to(liquid, {
         attr: { y: targetY, height: h },
-        duration: 0.55,
-        ease: 'elastic.out(1, 0.55)'
-      }, '>-0.05');
+        duration: 1.6,
+        ease: 'power3.out',
+        delay
+      });
     }
     if (meniscus) {
       gsap.set(meniscus, { attr: { y: bot } });
-      const tl = gsap.timeline({ delay });
-      tl.to(meniscus, {
-        attr: { y: overshootY },
-        duration: 1.1,
-        ease: 'power3.out'
-      })
-      .to(meniscus, {
-        attr: { y: targetY },
-        duration: 0.55,
-        ease: 'elastic.out(1, 0.5)'
-      }, '>-0.05')
-      .to(meniscus, {
-        attr: { y: targetY - 0.4 },
-        duration: 1.8,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1
-      });
+      gsap.timeline({ delay })
+        .to(meniscus, {
+          attr: { y: targetY },
+          duration: 1.6,
+          ease: 'power3.out'
+        })
+        .to(meniscus, {
+          attr: { y: targetY - 0.3 },
+          duration: 2.4,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1
+        });
     }
   }
 
