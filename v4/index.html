@@ -2424,7 +2424,7 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
 }
 .v2-mode .cyl-card {
   display: grid !important;
-  grid-template-columns: 80px 1fr 2fr !important;
+  grid-template-columns: 80px minmax(0, 1fr) minmax(0, 2fr) !important;
   align-items: center !important;
   gap: 32px !important;
   padding: 36px 0 !important;
@@ -4137,22 +4137,29 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
     const prefix = el.dataset.prefix || '';
     // Plain (visible) format — no padding, so $0.0 → $11.3 looks natural.
     const fmt = (n) => prefix + n.toFixed(dec);
-    // Padded format used only to measure max width (so unit pill stays anchored).
     const intDigits = Math.max(1, Math.floor(Math.abs(target)).toString().length);
-    const padded = () => {
-      const [i, d] = target.toFixed(dec).split('.');
-      return prefix + i.padStart(intDigits, '0') + (d != null ? '.' + d : '');
+    const candidate = (digit) => {
+      const intPart = String(digit).repeat(intDigits);
+      const decPart = dec > 0 ? '.' + String(digit).repeat(dec) : '';
+      return prefix + intPart + decPart;
     };
-    // Right-align inside a box wide enough for the final string. Internal digits
-    // can wobble (Fraunces ignores tnum) but the right edge — and therefore the
-    // unit pill (B / % / ×) — stays anchored.
+    // Lock the counter to a fixed width = the widest possible string (8s win in
+    // most proportional serifs). Right-align inside, so the visible value
+    // anchors at the unit edge. With grid using minmax(0, 1fr) on the parent,
+    // this guarantees neither the unit pill, the cyl-label below, nor the grid
+    // columns can shift while the value animates.
     const lockWidth = () => {
       el.style.display = 'inline-block';
       el.style.textAlign = 'right';
       el.style.whiteSpace = 'pre';
       const prev = el.textContent;
-      el.textContent = padded();
-      el.style.minWidth = el.getBoundingClientRect().width + 'px';
+      let maxW = 0;
+      ['8', '0', '6', '4'].forEach(d => {
+        el.textContent = candidate(d);
+        const w = el.getBoundingClientRect().width;
+        if (w > maxW) maxW = w;
+      });
+      el.style.width = maxW + 'px';
       el.textContent = prev;
     };
     if (document.fonts && document.fonts.ready) {
