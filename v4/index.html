@@ -4162,25 +4162,32 @@ footer.colophon .right { color: var(--rust); font-weight: 600; text-align: right
       el.style.width = maxW + 'px';
       el.textContent = prev;
     };
+    const startAnim = () => {
+      const obj = { v: 0 };
+      el.textContent = fmt(0);
+      // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
+      const snapStep = dec === 0 ? 1 : (dec === 1 ? 0.1 : 0.05);
+      // Subtle opacity fade-in only — no Y translate (caused perceived layout shift)
+      gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.4, delay, ease: 'power2.out' });
+      gsap.to(obj, {
+        v: target,
+        duration: 1.4,
+        delay: delay + 0.15,
+        ease: 'power3.out',
+        snap: { v: snapStep },
+        onUpdate: () => { el.textContent = fmt(obj.v); }
+      });
+    };
+    // Lock width first (sync if fonts ready, async otherwise), then start the
+    // animation. If we ran them in parallel, gsap would overwrite the candidate
+    // strings used for measurement and the measurement itself would flash
+    // garbage values into the live counter.
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(lockWidth);
+      document.fonts.ready.then(() => { lockWidth(); startAnim(); });
     } else {
       lockWidth();
+      startAnim();
     }
-    const obj = { v: 0 };
-    el.textContent = fmt(0);
-    // Snap step: int=1, 1dec=0.1, 2dec=0.05 — feels like discrete ticks not rolling decimals
-    const snapStep = dec === 0 ? 1 : (dec === 1 ? 0.1 : 0.05);
-    // Subtle opacity fade-in only — no Y translate (caused perceived layout shift)
-    gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.4, delay, ease: 'power2.out' });
-    gsap.to(obj, {
-      v: target,
-      duration: 1.4,
-      delay: delay + 0.15,
-      ease: 'power3.out',
-      snap: { v: snapStep },
-      onUpdate: () => { el.textContent = fmt(obj.v); }
-    });
   }
 
   /* Animate cylinders + counters when hero-right enters viewport (or on load) */
